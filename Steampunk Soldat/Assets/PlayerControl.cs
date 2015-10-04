@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 public class PlayerControl : NetworkBehaviour {
 
     public float speed = 1f;
-    public float accel = 1f;
+    //public float accel = 1f;
     public float jumpForce = 1f;
     public float camDistance = -16;
     bool jump = false;
@@ -34,7 +34,7 @@ public class PlayerControl : NetworkBehaviour {
             return;
 
         grounded = GroundCheck();
-        VelocityMovement();
+        VelocityMovement(); //movement by setting rigidbody velocity
         
         if (jump)
         {
