@@ -4,8 +4,9 @@ using UnityEngine.Networking;
 
 public class PlayerControl : NetworkBehaviour {
 
-    public float speed = 1f;
-    //public float accel = 1f;
+    public float maxSpeed = 1f;
+    public float accel = 1f;
+    public float airAccel = 1f;
     public float jumpForce = 1f;
     public static float camDistance = -16;
     bool jump = false;
@@ -34,7 +35,7 @@ public class PlayerControl : NetworkBehaviour {
             return;
 
         grounded = GroundCheck();
-        VelocityMovement(); //movement by setting rigidbody velocity
+        ForceMovement();
         
         if (jump)
         {
@@ -44,17 +45,18 @@ public class PlayerControl : NetworkBehaviour {
 
     }
 
+    //unused
     void VelocityMovement()
     {
         Vector2 targetVel = new Vector2(0, 0);
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
-            targetVel.x = -speed;
+            targetVel.x = -maxSpeed;
 
         }
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
-            targetVel.x = speed;
+            targetVel.x = maxSpeed;
 
         }
         this.GetComponent<Rigidbody>().velocity = new Vector3(targetVel.x, GetComponent<Rigidbody>().velocity.y, 0);
@@ -62,10 +64,34 @@ public class PlayerControl : NetworkBehaviour {
 
     void ForceMovement()
     {
-        float horInput = Input.GetAxisRaw("Horizontal");
-        if (horInput != 0)
+        //float horInput = Input.GetAxisRaw("Horizontal");
+
+        bool wantsToMoveRight = Input.GetButton("Right");
+        bool wantsToMoveLeft = Input.GetButton("Left");
+
+        Rigidbody rigidBody = GetComponent<Rigidbody>();
+        Vector3 currentVel = rigidBody.velocity;
+        float xVel = currentVel.x;
+
+        if (!wantsToMoveLeft && !wantsToMoveRight)
         {
-            GetComponent<Rigidbody>().AddForce(new Vector3(horInput * speed, 0, 0));
+            if(grounded && xVel != 0) //no input and on the ground
+            {
+                rigidBody.velocity = new Vector3(0, currentVel.y, 0); // stop x movement if no input and grounded
+            }
+            return;
+        }
+
+        float xSpeed = Mathf.Abs(xVel);
+        float acceleration = (grounded ? accel : airAccel); //different acceleration in the air
+        
+        if (wantsToMoveLeft && xVel > -maxSpeed)
+        {
+            rigidBody.AddForce(new Vector3(-acceleration / (1+xSpeed), 0, 0));
+        }
+        else if (wantsToMoveRight && xVel < maxSpeed) // character not moving to the right on max vel
+        {
+            rigidBody.AddForce(new Vector3(acceleration / (1+xSpeed), 0, 0));
         }
     }
 

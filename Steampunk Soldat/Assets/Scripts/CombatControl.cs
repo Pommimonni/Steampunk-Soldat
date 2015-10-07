@@ -19,11 +19,30 @@ public class CombatControl : NetworkBehaviour {
     bool dead = false;
 	// Use this for initialization
 	void Start () {
+        if (isLocalPlayer)
+        {
+            CmdSpawnWeapon(); //everyone asks server to spawn their weapon
+        }
         weaponScript = weapon.GetComponent<IWeapon>();
         healthBar.value = maxHealth;
         health = maxHealth;
         selfCollider = GetComponentInChildren<Collider>();
 	}
+
+    [Command]
+    void CmdSpawnWeapon()
+    {
+        weapon = (GameObject)Instantiate(weapon, transform.position, transform.rotation);
+        NetworkServer.Spawn(weapon);
+        RpcSetWeapon(weapon);
+    }
+
+    [ClientRpc]
+    void RpcSetWeapon(GameObject newWeapon)
+    {
+        weapon = newWeapon;
+        weapon.transform.parent = transform;
+    }
 	
 	// Update is called once per frame
 	void Update () {

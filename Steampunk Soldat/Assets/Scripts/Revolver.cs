@@ -12,6 +12,13 @@ public class Revolver : NetworkBehaviour, IWeapon {
 
     bool onCooldown = false;
 
+    // Use this for initialization
+    void Start()
+    {
+        //if(!isLocalPlayer)
+            //NetworkServer.Spawn(this.gameObject);
+    }
+
     public float GetDamage()
     {
         return damage;
@@ -32,8 +39,15 @@ public class Revolver : NetworkBehaviour, IWeapon {
             NetworkServer.Spawn(bullet);
             onCooldown = true;
             Invoke("ClearCooldown", cooldown);
+            RpcShootSound();
         }
         
+    }
+    
+    [ClientRpc]
+    public void RpcShootSound()
+    {
+        GetComponent<AudioSource>().Play();
     }
 
     void ClearCooldown()
@@ -41,10 +55,7 @@ public class Revolver : NetworkBehaviour, IWeapon {
         onCooldown = false;
     }
     
-	// Use this for initialization
-	void Start () {
 	
-	}
 	
 	// Update is called once per frame
 	void Update () {
