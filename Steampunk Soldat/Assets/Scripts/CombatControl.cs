@@ -19,11 +19,12 @@ public class CombatControl : NetworkBehaviour {
     bool dead = false;
 	// Use this for initialization
 	void Start () {
-        if (isLocalPlayer)
+        if (isLocalPlayer && weapon)
         {
             CmdSpawnWeapon(); //everyone asks server to spawn their weapon
         }
-        weaponScript = weapon.GetComponent<IWeapon>();
+        if(weapon)
+            weaponScript = weapon.GetComponent<IWeapon>();
         healthBar.value = maxHealth;
         health = maxHealth;
         selfCollider = GetComponentInChildren<Collider>();

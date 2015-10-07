@@ -100,17 +100,18 @@ public class PlayerControl : NetworkBehaviour {
     {
         Vector3 pPos = this.transform.position;
         Vector3 mPos = Input.mousePosition;
+        Vector3 cPos = Camera.main.transform.position;
         Rect screenRect = new Rect(1, 1, Screen.width-2, Screen.height-2);
         //Debug.Log("Mouse: " + mPos);
         if (screenRect.Contains(mPos))
         {
-            Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -camDistance)); //mouse position in the world on the xy plane when z = 0
+            Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -cPos.z)); //mouse position in the world on the xy plane when z = 0
             float camY = (mWorldPos.y + pPos.y) / 2;
             float camX = (mWorldPos.x + pPos.x) / 2; 
-            Camera.main.transform.position = new Vector3(camX, camY, camDistance); //middle of the camera is set to between the cursor and the character
+            Camera.main.transform.position = new Vector3(camX, camY, cPos.z); //middle of the camera is set to between the cursor and the character
         } else
         {
-            Camera.main.transform.position = new Vector3(pPos.x, pPos.y, camDistance); //if the pointer is out of the screen, focus camera on the character
+            Camera.main.transform.position = new Vector3(pPos.x, pPos.y, cPos.z); //if the pointer is out of the screen, focus camera on the character
         }
     }
 
