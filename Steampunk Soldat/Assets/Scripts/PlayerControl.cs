@@ -28,21 +28,18 @@ public class PlayerControl : NetworkBehaviour {
         if (!isLocalPlayer)
             return;
 
-        /*
+        
         bool rightInput = Input.GetButton("Right");
         bool leftInput = Input.GetButton("Left");
         bool jumpInput = Input.GetKeyDown(KeyCode.Space);
-        if((rightInput || leftInput) && jumpInput)
+        if ((rightInput || leftInput) && jumpInput)
         {
             CheckSideStep();
         }
         else
         {
-            */
-        CheckRegularJump();
-        
-        
-        
+            CheckRegularJump();
+        }
         
         MoveCamera();
 	}
@@ -54,11 +51,11 @@ public class PlayerControl : NetworkBehaviour {
 
         grounded = GroundCheck();
         ForceMovement();
-        if (jumping)
+        if (jumping && !sideStepping)
             Jump();
         if (sideStepping)
         {
-            //SideStep();
+            SideStep();
         }
     }
 
@@ -69,6 +66,7 @@ public class PlayerControl : NetworkBehaviour {
         bool left = Input.GetButton("Left");
         float xForce = left ? -sideStepForce : sideStepForce;
         Vector3 sideStepVector = new Vector3(xForce, sideStepUpForce, 0);
+        GetComponent<Rigidbody>().AddForce(sideStepVector);
         Invoke("JumpCooldown", 0.2f);
         sideStepping = false;
     }
