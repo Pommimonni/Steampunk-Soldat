@@ -62,6 +62,7 @@ public class PlayerControl : NetworkBehaviour {
         this.GetComponent<Rigidbody>().velocity = new Vector3(targetVel.x, GetComponent<Rigidbody>().velocity.y, 0);
     }
 
+    //force based movement
     void ForceMovement()
     {
         //float horInput = Input.GetAxisRaw("Horizontal");
