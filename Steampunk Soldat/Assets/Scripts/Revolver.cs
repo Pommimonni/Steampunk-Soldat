@@ -24,6 +24,7 @@ public class Revolver : NetworkBehaviour, IWeapon {
         return damage;
     }
     
+    //Call only on server
     public void Shoot(Vector3 from, Vector3 towards, Collider col)
     {
         if (!onCooldown)
