@@ -21,7 +21,7 @@ public class CombatControl : NetworkBehaviour {
 	void Start () {
         if (isLocalPlayer && weapon)
         {
-            CmdSpawnWeapon(); //everyone asks server to spawn their weapon
+            //CmdSpawnWeapon(); //everyone asks server to spawn their weapon
         }
         if(weapon)
             weaponScript = weapon.GetComponent<IWeapon>();
@@ -30,7 +30,7 @@ public class CombatControl : NetworkBehaviour {
         selfCollider = GetComponentInChildren<Collider>();
 	}
 
-    //testing gitignore
+    //test
     [Command]
     void CmdSpawnWeapon()
     {
@@ -39,6 +39,7 @@ public class CombatControl : NetworkBehaviour {
         RpcSetWeapon(weapon);
     }
 
+    //test
     [ClientRpc]
     void RpcSetWeapon(GameObject newWeapon)
     {
@@ -51,18 +52,23 @@ public class CombatControl : NetworkBehaviour {
         healthBar.value = health;
         if (!isLocalPlayer)
             return;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             //Debug.Log("Combat Bang");
-            Vector3 pPos = this.transform.position;
-            Vector3 mPos = Input.mousePosition;
-            //Debug.Log("Mouse: " + mPos);
-            Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -PlayerControl.camDistance));
-            Vector3 shootDirection = (mWorldPos - pPos);
-            shootDirection.z = 0; // just to be sure
-            shootDirection.Normalize();
-            //weaponScript.CmdShoot(pPos+0.5f*shootDirection, shootDirection);
-            CmdShoot(pPos, shootDirection); // Command needs to be in the same script/object?
+            if (!weaponScript.Cooldown())
+            {
+                Debug.Log("requesting to shoot");
+                Vector3 pPos = this.transform.position;
+                Vector3 mPos = Input.mousePosition;
+                //Debug.Log("Mouse: " + mPos);
+                Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -Camera.main.transform.position.z));
+                Vector3 shootDirection = (mWorldPos - pPos);
+                shootDirection.z = 0; // just to be sure
+                shootDirection.Normalize();
+                //weaponScript.CmdShoot(pPos+0.5f*shootDirection, shootDirection);
+                CmdShoot(pPos, shootDirection);
+                weaponScript.SetCooldown(true);
+            }
         }
 	}
 
@@ -89,6 +95,11 @@ public class CombatControl : NetworkBehaviour {
     [Command]
     void CmdShoot(Vector3 from, Vector3 towards)
     {
-        weaponScript.Shoot(from, towards, selfCollider);
+        if (!weaponScript.Cooldown())
+        {
+            weaponScript.Shoot(from, towards, selfCollider);
+            GetComponent<PlayerAudio>().RpcShootingSound();
+        }
+        
     }
 }

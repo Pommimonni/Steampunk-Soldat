@@ -19,6 +19,17 @@ public class Revolver : NetworkBehaviour, IWeapon {
             //NetworkServer.Spawn(this.gameObject);
     }
 
+    public bool Cooldown()
+    {
+        return onCooldown;
+    }
+
+    public void SetCooldown(bool onCD)
+    {
+        onCooldown = onCD;
+        Invoke("ClearCooldown", cooldown);
+    }
+
     public float GetDamage()
     {
         return damage;
@@ -40,11 +51,12 @@ public class Revolver : NetworkBehaviour, IWeapon {
             NetworkServer.Spawn(bullet);
             onCooldown = true;
             Invoke("ClearCooldown", cooldown);
-            RpcShootSound();
+            //RpcShootSound(); //called on all clients
         }
         
     }
     
+    //this object is not spawned so this doesnt work
     [ClientRpc]
     public void RpcShootSound()
     {
