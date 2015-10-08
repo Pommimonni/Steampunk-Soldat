@@ -30,6 +30,7 @@ public class CombatControl : NetworkBehaviour {
         selfCollider = GetComponentInChildren<Collider>();
 	}
 
+    //testing gitignore
     [Command]
     void CmdSpawnWeapon()
     {
