@@ -21,7 +21,7 @@ public class CombatControl : NetworkBehaviour {
 	void Start () {
         if (isLocalPlayer && weapon)
         {
-            //CmdSpawnWeapon(); //everyone asks server to spawn their weapon
+            SpawnWeapon();
         }
         if(weapon)
             weaponScript = weapon.GetComponent<IWeapon>();
@@ -31,12 +31,12 @@ public class CombatControl : NetworkBehaviour {
 	}
 
     //test
-    [Command]
-    void CmdSpawnWeapon()
+    
+    void SpawnWeapon()
     {
         weapon = (GameObject)Instantiate(weapon, transform.position, transform.rotation);
-        NetworkServer.Spawn(weapon);
-        RpcSetWeapon(weapon);
+        NetworkServer.SpawnWithClientAuthority(weapon, connectionToClient);
+        //RpcSetWeapon(weapon);
     }
 
     //test

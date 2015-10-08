@@ -11,12 +11,18 @@ public class Revolver : NetworkBehaviour, IWeapon {
     public GameObject bulletPrefab;
 
     bool onCooldown = false;
-
+    
+    AudioSource shootingSound;
     // Use this for initialization
     void Start()
     {
-        //if(!isLocalPlayer)
-            //NetworkServer.Spawn(this.gameObject);
+        shootingSound = GetComponent<AudioSource>();
+    }
+
+    [ClientRpc]
+    public void RpcShootingSound()
+    {
+        shootingSound.Play(); //bang
     }
 
     public bool Cooldown()
