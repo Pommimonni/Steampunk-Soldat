@@ -46,6 +46,7 @@ public class Bullet : NetworkBehaviour {
             Debug.Log("hit");
             other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage);
             Destroy(gameObject);
+            //play sound
         }
     }
 }

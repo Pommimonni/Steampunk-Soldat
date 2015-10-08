@@ -7,9 +7,11 @@
 *.csproj
 *.unityproj
 *.sln
+*.sln*
 **/*.sln
 *.sln.DotSettings.user
 *.suo
+*.suo*
 *.user
 *.userprefs
 *.pidb
@@ -65,5 +67,3 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 *.sln
-Steampunk Soldat/Steampunk Soldat.sln
-Steampunk Soldat/Steampunk Soldat.sln
