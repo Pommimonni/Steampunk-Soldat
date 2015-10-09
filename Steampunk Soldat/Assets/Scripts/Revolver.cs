@@ -13,6 +13,36 @@ public class Revolver : NetworkBehaviour, IWeapon {
     bool onCooldown = false;
     
     AudioSource shootingSound;
+
+    [SyncVar]
+    public NetworkInstanceId weaponOwnerNetID;
+    GameObject weaponOwner;
+    Collider weaponOwnerCollider;
+
+
+    public override void OnStartClient()
+    {
+        // When we are spawned on the client,
+        // find the parent object using its ID,
+        // and set it to be our transform's parent.
+       
+        base.OnStartClient();
+        //Debug.Log("revolver started on client");
+       // Debug.Log("For: " + gameObject + " Script: " + this);
+        //Debug.Log("Trying to find: " + parentNetId);
+        weaponOwner = ClientScene.FindLocalObject(weaponOwnerNetID);
+        //Debug.Log("Parent object: " + parentObject);
+        transform.parent = weaponOwner.transform;
+        weaponOwner.GetComponent<CombatControl>().SetWeapon(this);
+       // Debug.Log("Parent set");
+        weaponOwnerCollider = weaponOwner.GetComponentInChildren<Collider>();
+    }
+
+    public void SetParent(NetworkInstanceId newParent)
+    {
+        Debug.Log("Setting revolver's parent");
+        this.weaponOwnerNetID = newParent;
+    }
     // Use this for initialization
     void Start()
     {
@@ -40,15 +70,34 @@ public class Revolver : NetworkBehaviour, IWeapon {
     {
         return damage;
     }
-    
-    //Call only on server
-    public void Shoot(Vector3 from, Vector3 towards, Collider col)
+
+    //Runs on client
+    public void ShootingRequest()
+    {
+        if (!Cooldown())
+        {
+            Debug.Log("Combat Bang");
+            Debug.Log("requesting to shoot");
+            Vector3 pPos = weaponOwner.transform.position;
+            Vector3 mPos = Input.mousePosition;
+            //Debug.Log("Mouse: " + mPos);
+            Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -Camera.main.transform.position.z));
+            Vector3 shootDirection = (mWorldPos - pPos);
+            shootDirection.z = 0; // just to be sure
+            shootDirection.Normalize();
+            CmdShoot(pPos + 0.5f * shootDirection, shootDirection); //server fires the gun
+            SetCooldown(true); //setting cooldown also here on client so there wont be too many failed shooting requests.
+        }
+    }
+
+    [Command]
+    public void CmdShoot(Vector3 from, Vector3 towards)
     {
         if (!onCooldown)
         {
-            //Debug.Log("Revolver bang!");
+            Debug.Log("Revolver bang!");
             GameObject bullet = (GameObject)Instantiate(bulletPrefab, from, Quaternion.LookRotation(towards));
-            Physics.IgnoreCollision(col, bullet.GetComponent<Collider>());
+            Physics.IgnoreCollision(weaponOwnerCollider, bullet.GetComponent<Collider>()); //dont collide to local player
             Bullet bulletControl = bullet.GetComponent<Bullet>();
             bulletControl.setDamage(damage);
             Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
@@ -57,12 +106,11 @@ public class Revolver : NetworkBehaviour, IWeapon {
             NetworkServer.Spawn(bullet);
             onCooldown = true;
             Invoke("ClearCooldown", cooldown);
-            //RpcShootSound(); //called on all clients
+            RpcShootSound(); //called on all clients
         }
-        
+
     }
-    
-    //this object is not spawned so this doesnt work
+    //Server asks everyone to play sound
     [ClientRpc]
     public void RpcShootSound()
     {
@@ -74,10 +122,4 @@ public class Revolver : NetworkBehaviour, IWeapon {
         onCooldown = false;
     }
     
-	
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

@@ -18,6 +18,7 @@ public class PlayerControl : NetworkBehaviour {
     bool sideStepping = false;
     bool grounded = false;
     public GameObject groundCheckObject;
+
     // Use this for initialization
     void Start () {
         //Debug.Log("is local"+isLocalPlayer);

@@ -6,5 +6,8 @@ public interface IWeapon {
     float GetDamage();
     bool Cooldown();
     void SetCooldown(bool onCD);
-    void Shoot(Vector3 from, Vector3 towards, Collider col);
+    void SetParent(NetworkInstanceId netID);
+    [Command]
+    void CmdShoot(Vector3 from, Vector3 towards);
+    void ShootingRequest();
 }

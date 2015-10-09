@@ -5,16 +5,22 @@ using System.Collections;
 public class Bullet : NetworkBehaviour {
 
     float bulletDamage = 50;
-    IWeapon daddy;
+    IWeapon shotBy;
+    GameObject owner;
 
     public void setDamage(float damage)
     {
         bulletDamage = damage;
     }
 
-    public void setDaddy(IWeapon newDad) //which gun shot this bullet
+    public void ShotBy(IWeapon newWeapon) //which gun shot this bullet
     {
-        this.daddy = newDad;
+        this.shotBy = newWeapon;
+    }
+
+    public void ShotBy(GameObject shooter) //which player shot this bullet
+    {
+        this.owner = shooter;
     }
 
     // Use this for initialization

@@ -2,9 +2,11 @@
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CombatControl : NetworkBehaviour {
 
+    public List<GameObject> weaponList;
     public GameObject weapon;
     IWeapon weaponScript;
 
@@ -19,24 +21,54 @@ public class CombatControl : NetworkBehaviour {
     bool dead = false;
 	// Use this for initialization
 	void Start () {
-        if (isLocalPlayer && weapon)
+        if (isLocalPlayer)
         {
-            SpawnWeapon();
+            
+            Debug.Log("Player " + playerControllerId + " will now request weapon spawn");
+            CmdSpawnWeapon(0); //Server will spawn the default weapon
         }
-        if(weapon)
-            weaponScript = weapon.GetComponent<IWeapon>();
+        
         healthBar.value = maxHealth;
         health = maxHealth;
         selfCollider = GetComponentInChildren<Collider>();
 	}
 
-    //test
-    
-    void SpawnWeapon()
+    //Server spawns a weapon for the player running this script
+    [Command]
+    void CmdSpawnWeapon(int choise)
     {
-        weapon = (GameObject)Instantiate(weapon, transform.position, transform.rotation);
-        NetworkServer.SpawnWithClientAuthority(weapon, connectionToClient);
-        //RpcSetWeapon(weapon);
+        Debug.Log("switching weapon to: " + choise);
+        if(weaponList.Count < 1)
+        {
+            Debug.LogError("Weapon list is empty!");
+            return;
+        }
+        if(weaponList[choise] == null)
+        {
+            Debug.LogError("Invalid weapon index: "+choise);
+            return;
+        }
+        Debug.Log("cmd spawning weapon");
+        if(weapon != null)
+        {
+            Destroy(weapon);
+        }
+        weapon = (GameObject)Instantiate(weaponList[choise], transform.position, transform.rotation);
+        weapon.transform.parent = transform;
+        weaponScript = weapon.GetComponent<IWeapon>();
+        Debug.Log("Setting net ID to weapon: " + this.netId);
+        Debug.Log("For: " + weapon +" Script: "+weaponScript);
+        weaponScript.SetParent(this.netId);
+        NetworkServer.SpawnWithClientAuthority(weapon, connectionToClient); //on clients this spawns on root
+    }
+
+    //on the weapon side, when the weapon spawns on the client, the parenting is set and SetWeapon is called to set the weaponScript here
+
+    //when the weapon spawns on client it will call this
+    [Client]
+    public void SetWeapon(IWeapon newWeapon)
+    {
+        weaponScript = newWeapon;
     }
 
     //test
@@ -54,24 +86,10 @@ public class CombatControl : NetworkBehaviour {
             return;
         if (Input.GetMouseButton(0))
         {
-            //Debug.Log("Combat Bang");
-            if (!weaponScript.Cooldown())
-            {
-                Debug.Log("requesting to shoot");
-                Vector3 pPos = this.transform.position;
-                Vector3 mPos = Input.mousePosition;
-                //Debug.Log("Mouse: " + mPos);
-                Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -Camera.main.transform.position.z));
-                Vector3 shootDirection = (mWorldPos - pPos);
-                shootDirection.z = 0; // just to be sure
-                shootDirection.Normalize();
-                //weaponScript.CmdShoot(pPos+0.5f*shootDirection, shootDirection);
-                CmdShoot(pPos, shootDirection);
-                weaponScript.SetCooldown(true);
-            }
+            weaponScript.ShootingRequest(); //sends a request to server to shoot
         }
 	}
-
+    
     public void TakeDamage(float dmg)
     {
         if (!isServer)
@@ -91,15 +109,5 @@ public class CombatControl : NetworkBehaviour {
         if(isLocalPlayer)
             this.transform.position = new Vector3(0, 15, 0);
     }
-
-    [Command]
-    void CmdShoot(Vector3 from, Vector3 towards)
-    {
-        if (!weaponScript.Cooldown())
-        {
-            weaponScript.Shoot(from, towards, selfCollider);
-            GetComponent<PlayerAudio>().RpcShootingSound();
-        }
-        
-    }
+    
 }
