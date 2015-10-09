@@ -22,6 +22,8 @@ public class PlayerControl : NetworkBehaviour {
     // Use this for initialization
     void Start () {
         //Debug.Log("is local"+isLocalPlayer);
+        if (isLocalPlayer)
+            gameObject.AddComponent<AudioListener>();
     }
 	
 	// Update is called once per frame

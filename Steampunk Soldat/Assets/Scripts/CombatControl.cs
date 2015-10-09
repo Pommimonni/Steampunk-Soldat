@@ -24,9 +24,8 @@ public class CombatControl : NetworkBehaviour {
 	void Start () {
         if (isLocalPlayer)
         {
-            
             Debug.Log("Player " + playerControllerId + " will now request weapon spawn");
-            CmdSpawnWeapon(0); //Server will spawn the default weapon
+            CmdSpawnWeapon((int)Weapon.Pistol); //Server will spawn the default weapon
         }
         healthBar.value = maxHealth;
         health = maxHealth;
@@ -88,7 +87,15 @@ public class CombatControl : NetworkBehaviour {
         {
             weaponScript.ShootingRequest(); //sends a request to server to shoot
         }
-	}
+        if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CmdSpawnWeapon((int)Weapon.Pistol);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            CmdSpawnWeapon((int)Weapon.MachineGun);
+        }
+    }
     
     [Server]
     public void TakeDamage(float dmg, GameObject shooter)
@@ -106,17 +113,21 @@ public class CombatControl : NetworkBehaviour {
         }
     }
 
+    //this is called on the player object who got the kill
     [Server]
     private void GotAKill()
     {
         Debug.Log("player " + GetComponent<PlayerScore>().playerID + " got a kill!");
+        GetComponent<PlayerScore>().kills++;
         //add score 
     }
 
+    //this is called on the player object who died
     [Server]
     private void Die()
     {
         Debug.Log("Player " + GetComponent<PlayerScore>().playerID + " died");
+        GetComponent<PlayerScore>().deaths++;
         //add a death
     }
 

@@ -2,7 +2,10 @@
 using UnityEngine.Networking;
 using System.Collections;
 
+enum Weapon : int { Pistol = 0, MachineGun };
+
 public interface IWeapon {
+    
     float GetDamage();
     bool Cooldown();
     void SetCooldown(bool onCD);

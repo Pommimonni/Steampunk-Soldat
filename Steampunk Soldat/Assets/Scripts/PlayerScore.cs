@@ -11,25 +11,25 @@ public class PlayerScore : NetworkBehaviour {
     [SyncVar]
     public short playerID = -1;
 
-    short IDCount = 1;
+    static short IDCount = 1; //which id to give to next player
 
 	// Use this for initialization
 	void Start () {
-        if (!isLocalPlayer)
+        if (!isServer)
             return;
-        CmdSetPlayerID(); //the local player will get an ID from server that is synced to all
+        SetPlayerID(); //the local player will get an ID from server that is synced to all
     }
-
-    [Command]
-    void CmdSetPlayerID()
+    
+    [Server]
+    void SetPlayerID()
     {
         playerID = IDCount++;
-        Debug.Log("Server will now set player to id " + playerID);
+        Debug.Log("Server will now set new player to id " + playerID);
         
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
+        
 	}
 }
