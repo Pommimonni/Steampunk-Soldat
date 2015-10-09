@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class CombatControl : NetworkBehaviour {
 
@@ -27,7 +28,6 @@ public class CombatControl : NetworkBehaviour {
             Debug.Log("Player " + playerControllerId + " will now request weapon spawn");
             CmdSpawnWeapon(0); //Server will spawn the default weapon
         }
-        
         healthBar.value = maxHealth;
         health = maxHealth;
         selfCollider = GetComponentInChildren<Collider>();
@@ -90,17 +90,34 @@ public class CombatControl : NetworkBehaviour {
         }
 	}
     
-    public void TakeDamage(float dmg)
+    [Server]
+    public void TakeDamage(float dmg, GameObject shooter)
     {
         if (!isServer)
             return;
         health -= dmg;
         if(health <= 0)
         {
+            Die();
+            shooter.GetComponent<CombatControl>().GotAKill();
             dead = true;
             health = 100;
             RpcRespawn();
         }
+    }
+
+    [Server]
+    private void GotAKill()
+    {
+        Debug.Log("player " + GetComponent<PlayerScore>().playerID + " got a kill!");
+        //add score 
+    }
+
+    [Server]
+    private void Die()
+    {
+        Debug.Log("Player " + GetComponent<PlayerScore>().playerID + " died");
+        //add a death
     }
 
     [ClientRpc]

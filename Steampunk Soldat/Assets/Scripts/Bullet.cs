@@ -50,7 +50,7 @@ public class Bullet : NetworkBehaviour {
         if (other.layer == LayerMask.NameToLayer("Player"))
         {
             //Debug.Log("hit");
-            other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage);
+            other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage, owner);
             Destroy(gameObject);
             //play sound
         }

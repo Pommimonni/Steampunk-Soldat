@@ -25,7 +25,7 @@ public class Revolver : NetworkBehaviour, IWeapon {
         // When we are spawned on the client,
         // find the parent object using its ID,
         // and set it to be our transform's parent.
-       
+        
         base.OnStartClient();
         //Debug.Log("revolver started on client");
        // Debug.Log("For: " + gameObject + " Script: " + this);
@@ -100,6 +100,7 @@ public class Revolver : NetworkBehaviour, IWeapon {
             Physics.IgnoreCollision(weaponOwnerCollider, bullet.GetComponent<Collider>()); //dont collide to local player
             Bullet bulletControl = bullet.GetComponent<Bullet>();
             bulletControl.setDamage(damage);
+            bulletControl.ShotBy(weaponOwner);
             Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
             bulletRB.velocity = towards * bulletSpeed;
             Destroy(bullet, 3.0f);
