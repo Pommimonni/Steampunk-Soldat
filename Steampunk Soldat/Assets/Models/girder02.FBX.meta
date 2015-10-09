@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6c61f2f3c2772a34591441670dd9d133
-timeCreated: 1444318273
+guid: 9c18b2f908f4d2545ba7e722f6bc68f6
+timeCreated: 1444393028
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: platform01
+    4300000: girder02
   materials:
     importMaterials: 1
     materialName: 1
