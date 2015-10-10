@@ -23,6 +23,11 @@ public class PlayerScore : NetworkBehaviour {
     [Server]
     void SetPlayerID()
     {
+        if(GetComponent<EnemyAI>() != null)
+        {
+            playerID = 666;
+            return;
+        }
         playerID = IDCount++;
         Debug.Log("Server will now set new player to id " + playerID);
         

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using System;
 
 public class PlayerControl : NetworkBehaviour {
 
@@ -9,13 +10,16 @@ public class PlayerControl : NetworkBehaviour {
     public float airAccel = 1f;
     public float jumpForce = 1f;
     public float jumpTakeoffTime = 0.4f;
+    public float jumpCooldown = 0.2f;
     public float sideStepForce = 1f;
     public float sideStepUpForce = 1f;
 
     float jumpCharge = 0f;
 
-    bool jumping = false;
+    bool jumping = false; //common state for both jumps
+    bool upJumping = false;
     bool sideStepping = false;
+    bool sideStepLeft = false;
     bool grounded = false;
     public GameObject groundCheckObject;
 
@@ -30,22 +34,11 @@ public class PlayerControl : NetworkBehaviour {
 	void Update () {
         if (!isLocalPlayer)
             return;
-
         
-        bool rightInput = Input.GetButton("Right");
-        bool leftInput = Input.GetButton("Left");
-        bool jumpInput = Input.GetKeyDown(KeyCode.Space);
-        if ((rightInput || leftInput) && jumpInput)
-        {
-            CheckSideStep();
-        }
-        else
-        {
-            CheckRegularJump();
-        }
-        
+        CheckJump();
         MoveCamera();
 	}
+    
 
     void FixedUpdate()
     {
@@ -54,60 +47,81 @@ public class PlayerControl : NetworkBehaviour {
 
         grounded = GroundCheck();
         ForceMovement();
-        if (jumping && !sideStepping)
-            Jump();
         if (sideStepping)
         {
             SideStep();
+        }
+        if (upJumping)
+        {
+            JumpUp();
         }
     }
 
     void SideStep()
     {
-        jumping = true;
-        Debug.Log("side stepping");
-        bool left = Input.GetButton("Left");
-        float xForce = left ? -sideStepForce : sideStepForce;
-        Vector3 sideStepVector = new Vector3(xForce, sideStepUpForce, 0);
-        GetComponent<Rigidbody>().AddForce(sideStepVector);
-        Invoke("JumpCooldown", 0.2f);
         sideStepping = false;
+        Debug.Log("side stepping");
+        float xForce = sideStepLeft ? -sideStepForce : sideStepForce;
+        float jumpCoef = GetJumpEffort(jumpCharge, jumpTakeoffTime);
+        Vector3 sideStepVector = new Vector3(xForce* jumpCoef, sideStepUpForce* jumpCoef, 0);
+        GetComponent<Rigidbody>().AddForce(sideStepVector);
+        Invoke("JumpCooldown", jumpCooldown);
     }
 
-    void CheckSideStep()
+    void JumpUp()
     {
-        if (grounded && !jumping && !sideStepping)
-        {
-            sideStepping = true;
-        }
+        upJumping = false;
+        float jumpCoef = GetJumpEffort(jumpCharge, jumpTakeoffTime);
+        //Debug.Log("Jump final charge = " + jumpCoef);
+        GetComponent<Rigidbody>().AddForce(new Vector3(0, jumpCoef * jumpForce, 0));
+        Invoke("JumpCooldown", jumpCooldown);
     }
 
-    void CheckRegularJump()
+    void CheckJump()
     {
-        if (sideStepping)
+        if (jumping) //on cooldown
             return;
+
+        bool jumpRelease = Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W);
+        bool jumpHold = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
+
+        bool rightInput = Input.GetButton("Right");
+        bool leftInput = Input.GetButton("Left");
+
         bool jumpFullyCharged = (jumpCharge >= jumpTakeoffTime);
-        bool jumpNow = (Input.GetKeyUp(KeyCode.Space) || jumpFullyCharged);
+        bool jumpNow = (jumpRelease || jumpFullyCharged);
         
         if (grounded && jumpNow)
         {
+            if(rightInput || leftInput)
+            {
+                sideStepping = true;
+                sideStepLeft = leftInput;
+            }
+            else
+            {
+                upJumping = true; //upwards jump
+            }
             jumping = true;
         }
-        else if (grounded && Input.GetKey(KeyCode.Space) && !jumping) //cannot charge if already jumping
+        else if (grounded && jumpHold) //cannot charge if already jumping
         {
             jumpCharge += Time.deltaTime;
         }
-        else if (!jumping)
+        else
         {
             jumpCharge = 0;
         }
     }
 
-    void Jump()
+   
+
+    //how long has the jump key been held down and how should it affect the jump
+    float GetJumpEffort(float jumpCharge, float maxCharge)
     {
-        float jumpCoef = jumpCharge / jumpTakeoffTime; // 0-1
+        float jumpCoef = jumpCharge / maxCharge; // 0-1
         //Debug.Log("Jump initial charge = " + jumpCoef);
-        if (jumpCoef < 0.5f)
+        if (jumpCoef < 0.4f) //Minimum percentage of jumpTakeOffTime that needs to be held down for the player to jump at all
         {
             jumpCoef = 0;
         }
@@ -117,18 +131,17 @@ public class PlayerControl : NetworkBehaviour {
         }
         else
         {
-            jumpCoef -= 0.5f; // 0 - 0.5f;
-            jumpCoef *= 2; // 0 - 1 scale from 0.5-1 original value
+            jumpCoef = jumpCoef * jumpCoef;
             //doesn't jump during the first half of holding and then start scaling the jump up to full hold
         }
-        //Debug.Log("Jump final charge = " + jumpCoef);
-        GetComponent<Rigidbody>().AddForce(new Vector3(0, jumpCoef * jumpForce, 0));
-        Invoke("JumpCooldown", 0.2f);
+        return jumpCoef;
     }
 
     void JumpCooldown()
     {
+        Debug.Log("Clearing jump cooldown now ");
         jumping = false;
+        jumpCharge = 0;
     }
 
     //unused

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class EnemyAI : MonoBehaviour {
+public class EnemyAI : NetworkBehaviour {
 
 
     public float maxSpeed = 1f;
@@ -18,12 +19,12 @@ public class EnemyAI : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        enabled = isServer;
         RandomizeAction();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	    
 	}
 
     //randomizes some movement every 2 sec
@@ -57,6 +58,8 @@ public class EnemyAI : MonoBehaviour {
 
     void FixedUpdate()
     {
+        if (!isServer)
+            return;
         grounded = GroundCheck();
         ForceMovement(aiRight, aiLeft);
         if (aiJump && grounded)

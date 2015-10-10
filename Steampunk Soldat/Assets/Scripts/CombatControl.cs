@@ -134,6 +134,10 @@ public class CombatControl : NetworkBehaviour {
     [ClientRpc]
     public void RpcRespawn()
     {
+        if(GetComponent<EnemyAI>() != null)
+        {
+            this.transform.position = new Vector3(0, 15, 0);
+        }
         if(isLocalPlayer)
             this.transform.position = new Vector3(0, 15, 0);
     }
