@@ -38,18 +38,23 @@ public class Bullet : NetworkBehaviour {
         this.transform.rotation = Quaternion.LookRotation(this.GetComponent<Rigidbody>().velocity);
     }
 
+    bool alreadyTriggered = false;
+
     void OnTriggerEnter(Collider otherCollider)
     {
-        if (!isServer) //server/host handles the bullets
+        if (!isServer || alreadyTriggered) //server/host handles the bullets
             return;
+        alreadyTriggered = true; //avoid possible double triggers
+        Debug.Log("Bullet collided on server");
         GameObject other = otherCollider.gameObject;
         if (other.layer == LayerMask.NameToLayer("Ground"))
         {
+            Debug.Log("Bullet hit ground");
             Destroy(gameObject);
         }
         if (other.layer == LayerMask.NameToLayer("Player"))
         {
-            //Debug.Log("hit");
+            Debug.Log("Bullet hit player");
             other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage, owner);
             Destroy(gameObject);
             //play sound

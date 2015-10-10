@@ -102,9 +102,11 @@ public class CombatControl : NetworkBehaviour {
     {
         if (!isServer)
             return;
+        Debug.Log("server applied damage to a player");
         health -= dmg;
         if(health <= 0)
         {
+            Debug.Log("server noticed player death");
             Die();
             shooter.GetComponent<CombatControl>().GotAKill();
             dead = true;
@@ -134,12 +136,18 @@ public class CombatControl : NetworkBehaviour {
     [ClientRpc]
     public void RpcRespawn()
     {
-        if(GetComponent<EnemyAI>() != null)
+        if (isLocalPlayer || (isServer && GetComponent<EnemyAI>() != null))
         {
-            this.transform.position = new Vector3(0, 15, 0);
+            GameObject spawnPoint = SpawnPoint.FindNearest(this.transform.position);
+            if(spawnPoint != null)
+            {
+                this.transform.position = spawnPoint.transform.position;
+            } else
+            {
+                this.transform.position = new Vector3(0, 15, 0);
+            }
         }
-        if(isLocalPlayer)
-            this.transform.position = new Vector3(0, 15, 0);
+            
     }
     
 }
