@@ -83,10 +83,7 @@ public class CombatControl : NetworkBehaviour {
         healthBar.value = health;
         if (!isLocalPlayer)
             return;
-        if (Input.GetMouseButton(0))
-        {
-            weaponScript.ShootingRequest(); //sends a request to server to shoot
-        }
+        
         if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             CmdSpawnWeapon((int)Weapon.Pistol);
