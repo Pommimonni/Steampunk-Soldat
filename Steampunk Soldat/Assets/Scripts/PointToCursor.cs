@@ -10,8 +10,6 @@ public class PointToCursor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log("Combat Bang");
-        Debug.Log("requesting to shoot");
         Vector3 pPos = transform.parent.position;
         Vector3 mPos = Input.mousePosition;
         //Debug.Log("Mouse: " + mPos);

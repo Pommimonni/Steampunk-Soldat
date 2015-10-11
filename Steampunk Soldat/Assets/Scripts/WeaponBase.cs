@@ -8,7 +8,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     public float bulletSpeed = 35f;
     public float cooldown = 1f;
     public GameObject bulletPrefab;
-    public GameObject barrelEnd;
+    public Transform barrelEnd;
 
     public IWeaponSpec weaponSpec; //for future use
 
@@ -39,6 +39,10 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         weaponOwner.GetComponent<CombatControl>().SetWeapon(this);
         // Debug.Log("Parent set");
         weaponOwnerCollider = weaponOwner.GetComponentInChildren<Collider>();
+        if (!weaponOwner.GetComponent<NetworkIdentity>().isLocalPlayer)
+        {
+            GetComponent<PointToCursor>().enabled = false;
+        }
     }
 
     public void SetParent(NetworkInstanceId newParent)
@@ -98,7 +102,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
             Vector3 shootDirection = (mWorldPos - pPos);
             shootDirection.z = 0; // just to be sure
             shootDirection.Normalize();
-            CmdShoot(pPos + 0.5f * shootDirection, shootDirection); //server fires the gun
+            CmdShoot(barrelEnd.position, shootDirection); //server fires the gun
             SetCooldown(true); //setting cooldown also here on client so there wont be too many failed shooting requests.
         }
     }
