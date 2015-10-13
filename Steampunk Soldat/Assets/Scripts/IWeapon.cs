@@ -2,7 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-enum Weapon : int { Pistol = 0, MachineGun };
+enum Weapon : int { Pistol = 0, MachineGun, Minigun };
 
 public interface IWeapon {
     

@@ -92,6 +92,10 @@ public class CombatControl : NetworkBehaviour {
         {
             CmdSpawnWeapon((int)Weapon.MachineGun);
         }
+        if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            CmdSpawnWeapon((int)Weapon.Minigun);
+        }
     }
     
     [Server]

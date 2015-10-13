@@ -44,9 +44,13 @@ public class Bullet : NetworkBehaviour {
     {
         if (!isServer || alreadyTriggered) //server/host handles the bullets
             return;
-        alreadyTriggered = true; //avoid possible double triggers
         Debug.Log("Bullet collided on server");
         GameObject other = otherCollider.gameObject;
+        if (other.layer == LayerMask.NameToLayer("Bullet"))
+        {
+            return;
+        }
+        alreadyTriggered = true; //avoid possible double triggers
         if (other.layer == LayerMask.NameToLayer("Ground"))
         {
             Debug.Log("Bullet hit ground");

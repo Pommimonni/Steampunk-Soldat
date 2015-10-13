@@ -7,6 +7,9 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     public float damage = 50;
     public float bulletSpeed = 35f;
     public float cooldown = 1f;
+    public float reloadTime = 5f;
+    public float inaccurasy = 0;
+    public int ammoPerClip = 40;
     public GameObject bulletPrefab;
     public Transform barrelEnd;
 
@@ -20,6 +23,9 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     public NetworkInstanceId weaponOwnerNetID;
     protected GameObject weaponOwner;
     protected Collider weaponOwnerCollider;
+
+    [SyncVar]
+    protected int ammoLeftInClip = 40;
     
 
 
@@ -54,6 +60,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     void Start()
     {
         shootingSound = GetComponent<AudioSource>();
+        ammoLeftInClip = ammoPerClip;
     }
 
     void Update()
@@ -83,6 +90,19 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Invoke("ClearCooldown", cooldown);
     }
 
+    public void SetReload(bool onCD)
+    {
+        Debug.Log("reloading!");
+        onCooldown = onCD;
+        Invoke("ClearReload", reloadTime);
+    }
+
+    public void ClearReload()
+    {
+        onCooldown = false;
+        ammoLeftInClip = ammoPerClip;
+    }
+
     public float GetDamage()
     {
         return damage;
@@ -102,9 +122,21 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
             Vector3 shootDirection = (mWorldPos - pPos);
             shootDirection.z = 0; // just to be sure
             shootDirection.Normalize();
-            CmdShoot(barrelEnd.position, shootDirection); //server fires the gun
-            SetCooldown(true); //setting cooldown also here on client so there wont be too many failed shooting requests.
+            CmdShoot(barrelEnd.position, shootDirection + getInaccurasy()); //server fires the gun
+            if(ammoLeftInClip < 1)
+            {
+                SetReload(true);
+            } else
+            {
+                SetCooldown(true); //setting cooldown also here on client so there wont be too many failed shooting requests.
+            }
+            
         }
+    }
+
+    public Vector3 getInaccurasy()
+    {
+        return (new Vector3(Random.value, Random.value, 0))*inaccurasy;
     }
 
     [Command]
@@ -113,22 +145,37 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         if (!onCooldown)
         {
             Debug.Log("Revolver bang!");
-            GameObject bullet = (GameObject)Instantiate(bulletPrefab, from, Quaternion.LookRotation(towards));
-            Physics.IgnoreCollision(weaponOwnerCollider, bullet.GetComponent<Collider>()); //dont collide to local player
-            Bullet bulletControl = bullet.GetComponent<Bullet>();
-            bulletControl.setDamage(damage);
-            bulletControl.ShotBy(weaponOwner);
-            bulletControl.ShotBy(this);
-            Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
-            bulletRB.velocity = towards * bulletSpeed;
-            Destroy(bullet, 3.0f);
-            NetworkServer.Spawn(bullet);
-            onCooldown = true;
-            Invoke("ClearCooldown", cooldown);
+            ShootBullet(from, towards);
+            ammoLeftInClip--;
+            if (ammoLeftInClip < 1)
+            {
+                SetReload(true);
+            }
+            else
+            {
+                SetCooldown(true); //setting cooldown also here on client so there wont be too many failed shooting requests.
+            }
             RpcShootSound(); //called on all clients
         }
 
     }
+
+    [Server]
+    public void ShootBullet(Vector3 from, Vector3 towards)
+    {
+        Debug.Log("Spawning a bullet");
+        GameObject bullet = (GameObject)Instantiate(bulletPrefab, from, Quaternion.LookRotation(towards));
+        Physics.IgnoreCollision(weaponOwnerCollider, bullet.GetComponent<Collider>()); //dont collide to local player
+        Bullet bulletControl = bullet.GetComponent<Bullet>();
+        bulletControl.setDamage(damage);
+        bulletControl.ShotBy(weaponOwner);
+        bulletControl.ShotBy(this);
+        Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
+        bulletRB.velocity = towards * bulletSpeed;
+        Destroy(bullet, 3.0f);
+        NetworkServer.Spawn(bullet);
+    }
+
     //Server asks everyone to play sound
     [ClientRpc]
     public void RpcShootSound()
