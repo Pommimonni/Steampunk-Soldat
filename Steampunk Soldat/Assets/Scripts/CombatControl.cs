@@ -105,7 +105,7 @@ public class CombatControl : NetworkBehaviour {
     void ChangedWeapon()
     {
         weaponChangeCooldown = true;
-        Invoke("WeaponChangeCooldownOff", 3f);
+        Invoke("WeaponChangeCooldownOff", 1.5f);
     }
 
     void WeaponChangeCooldownOff()
