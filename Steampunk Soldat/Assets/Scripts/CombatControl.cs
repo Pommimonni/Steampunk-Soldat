@@ -20,6 +20,7 @@ public class CombatControl : NetworkBehaviour {
     public Collider selfCollider;
 
     bool dead = false;
+    bool weaponChangeCooldown = false;
 	// Use this for initialization
 	void Start () {
         if (isLocalPlayer)
@@ -36,6 +37,9 @@ public class CombatControl : NetworkBehaviour {
     [Command]
     void CmdSpawnWeapon(int choise)
     {
+        if (weaponChangeCooldown)
+            return;
+        ChangedWeapon();
         Debug.Log("switching weapon to: " + choise);
         if(weaponList.Count < 1)
         {
@@ -83,7 +87,7 @@ public class CombatControl : NetworkBehaviour {
         healthBar.value = health;
         if (!isLocalPlayer)
             return;
-        
+
         if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             CmdSpawnWeapon((int)Weapon.Pistol);
@@ -97,11 +101,22 @@ public class CombatControl : NetworkBehaviour {
             CmdSpawnWeapon((int)Weapon.Minigun);
         }
     }
+
+    void ChangedWeapon()
+    {
+        weaponChangeCooldown = true;
+        Invoke("WeaponChangeCooldownOff", 3f);
+    }
+
+    void WeaponChangeCooldownOff()
+    {
+        weaponChangeCooldown = false;
+    }
     
     [Server]
     public void TakeDamage(float dmg, GameObject shooter)
     {
-        if (!isServer)
+        if (!isServer || dead)
             return;
         Debug.Log("server applied damage to a player");
         health -= dmg;
@@ -113,6 +128,7 @@ public class CombatControl : NetworkBehaviour {
             dead = true;
             health = 100;
             RpcRespawn();
+            Invoke("EndImmunity", 1f);
         }
     }
 
@@ -132,6 +148,11 @@ public class CombatControl : NetworkBehaviour {
         Debug.Log("Player " + GetComponent<PlayerScore>().playerID + " died");
         GetComponent<PlayerScore>().deaths++;
         //add a death
+    }
+
+    private void EndImmunity()
+    {
+        dead = false;
     }
 
     [ClientRpc]
