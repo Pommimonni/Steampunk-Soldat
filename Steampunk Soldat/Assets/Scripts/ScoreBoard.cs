@@ -5,16 +5,14 @@ using System.Collections.Generic;
 public class ScoreBoard : MonoBehaviour {
 
     List<PlayerScore> allScores;
-    public Image bg;
-    public GameObject rowBg;
-    public GameObject scoreRowPrefab;
     public GameObject scoreBoardUI;
 
-    public List<GameObject> scoreRows;
+    public List<GameObject> scoreRows; //SET IN EDITOR
     bool scoresVisible = false;
     // Use this for initialization
     void Start () {
-        scoreRows = new List<GameObject>();
+        scoreBoardUI.SetActive(false);
+        
     }
 	
 	// Update is called once per frame
@@ -30,21 +28,22 @@ public class ScoreBoard : MonoBehaviour {
             
             foreach(GameObject go in scoreRows)
             {
-                Destroy(go);
+                go.GetComponentInChildren<Text>().text = "";
             }
-            scoreRows = new List<GameObject>();
-            float yPos = 1;
+
+            int index = 0;
             foreach (PlayerScore nScore in allScores)
             {
-                GameObject newScoreRow = (GameObject)Instantiate(scoreRowPrefab, new Vector3(0, -(yPos++)*35 - 120, 0), Quaternion.identity);
-                scoreRows.Add(newScoreRow);
-                newScoreRow.GetComponentInChildren<Text>().text += "Player "+nScore.playerID+": Kills: "+nScore.kills+" Deaths: "+nScore.deaths+"\n";
-                newScoreRow.transform.SetParent(scoreBoardUI.transform, false);
+                scoreRows[index++].GetComponentInChildren<Text>().text = "Player "+nScore.playerID+ ": \t\tKills: " + nScore.kills+ " \t\tDeaths: " + nScore.deaths+"\n";
             }
         } else if (Input.GetKeyUp(KeyCode.Tab))
         {
             scoreBoardUI.SetActive(false);
             scoresVisible = false;
+        }
+        if(scoresVisible && !Input.GetKey(KeyCode.Tab))
+        {
+            scoreBoardUI.SetActive(false);
         }
         
     }
