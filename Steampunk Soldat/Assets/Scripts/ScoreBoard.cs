@@ -28,13 +28,19 @@ public class ScoreBoard : MonoBehaviour {
             
             foreach(GameObject go in scoreRows)
             {
+                go.SetActive(true);
                 go.GetComponentInChildren<Text>().text = "";
             }
 
             int index = 0;
             foreach (PlayerScore nScore in allScores)
             {
-                scoreRows[index++].GetComponentInChildren<Text>().text = "Player "+nScore.playerID+ ": \t\tKills: " + nScore.kills+ " \t\tDeaths: " + nScore.deaths+"\n";
+                scoreRows[index].SetActive(true);
+                scoreRows[index++].GetComponentInChildren<Text>().text = "Player "+nScore.playerID+ ": \t\tKills: " + nScore.kills+ " \t\tDeaths: " + nScore.deaths + " \t\tPing: " + nScore.playerPing;
+            }
+            for(int a = index; a < scoreRows.Count; a++)
+            {
+                scoreRows[a].SetActive(false);
             }
         } else if (Input.GetKeyUp(KeyCode.Tab))
         {

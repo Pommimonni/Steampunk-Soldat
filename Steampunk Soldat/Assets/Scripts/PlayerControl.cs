@@ -5,6 +5,7 @@ using System;
 
 public class PlayerControl : NetworkBehaviour {
 
+
     public float maxSpeed = 1f;
     public float accel = 1f;
     public float airAccel = 1f;

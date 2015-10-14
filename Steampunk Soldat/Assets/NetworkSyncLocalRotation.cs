@@ -13,25 +13,28 @@ public class NetworkSyncLocalRotation : NetworkBehaviour {
 	void Start () {
         currentLocalRot = Quaternion.identity;
         this.transform.localPosition = new Vector3(0, 0, 0);
-        
     }
 
     [Command]
     void CmdSetRotation(Quaternion newRotation)
     {
-        currentLocalRot = newRotation;
+        currentLocalRot = Quaternion.Slerp(currentLocalRot, newRotation, Time.time * 0.1f);
     }
-	
-	// Update is called once per frame
+
+    // Update is called once per frame
+    int count = 0;
 	void Update () {
         owner = transform.parent.GetComponent<NetworkIdentity>();
         if (owner.isLocalPlayer)
         {
+            count++;
             currentLocalRot = this.transform.localRotation;
-            if (!owner.isServer)
+            if (!owner.isServer && count > 6)
             {
                 CmdSetRotation(currentLocalRot);
+                count = 0;
             }
+            
             //Debug.Log("is local in rotation sync");
         }
         else

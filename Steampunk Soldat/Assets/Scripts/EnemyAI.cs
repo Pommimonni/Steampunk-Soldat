@@ -9,7 +9,6 @@ public class EnemyAI : NetworkBehaviour {
     public float accel = 1f;
     public float airAccel = 1f;
     public float jumpForce = 1f;
-    bool jump = false;
     bool grounded = false;
     public GameObject groundCheckObject;
 

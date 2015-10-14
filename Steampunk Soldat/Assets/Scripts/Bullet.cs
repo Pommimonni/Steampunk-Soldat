@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
 using System.Collections;
 
-public class Bullet : NetworkBehaviour {
+public class Bullet : MonoBehaviour {
 
     float bulletDamage = 50;
-    IWeapon shotBy;
+    //IWeapon shotBy;
     GameObject owner;
+    //bool serverBullet = false;
+
+    
 
     public void setDamage(float damage)
     {
@@ -15,7 +17,7 @@ public class Bullet : NetworkBehaviour {
 
     public void ShotBy(IWeapon newWeapon) //which gun shot this bullet
     {
-        this.shotBy = newWeapon;
+        //this.shotBy = newWeapon;
     }
 
     public void ShotBy(GameObject shooter) //which player shot this bullet
@@ -40,10 +42,42 @@ public class Bullet : NetworkBehaviour {
 
     bool alreadyTriggered = false;
 
-    void OnTriggerEnter(Collider otherCollider)
+    void OnTriggerEnter(Collider otherCollider) //local sim just destroys the bullet, server applies dmg
     {
-        if (!isServer || alreadyTriggered) //server/host handles the bullets
+        if (alreadyTriggered)
+        {
             return;
+        }
+        Debug.Log("Bullet collided");
+        GameObject other = otherCollider.gameObject;
+        if (other.layer == LayerMask.NameToLayer("Bullet"))
+        {
+            return;
+        }
+        alreadyTriggered = true; //avoid possible double triggers
+        if (other.layer == LayerMask.NameToLayer("Ground"))
+        {
+            Debug.Log("Bullet hit ground");
+            Destroy(gameObject);
+        }
+        if (other.layer == LayerMask.NameToLayer("Player"))
+        {
+            Debug.Log("Bullet hit player");
+            if (LocalData.isServerPlayer)
+            {
+                Debug.Log("Bullet hit player on SErver, applying dmg!");
+                other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage, owner);
+            }
+            Destroy(gameObject);
+            //play sound
+        }
+        
+    }
+
+    void OnTriggerEnterOld(Collider otherCollider)
+    {
+        //if (!isServer || alreadyTriggered) //server/host handles the bullets
+            //return;
         Debug.Log("Bullet collided on server");
         GameObject other = otherCollider.gameObject;
         if (other.layer == LayerMask.NameToLayer("Bullet"))

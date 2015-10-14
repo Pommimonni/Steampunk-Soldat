@@ -7,6 +7,8 @@ using System;
 
 public class CombatControl : NetworkBehaviour {
 
+    public static bool serverPlayer = false;
+
     public List<GameObject> weaponList;
     public GameObject weapon;
     IWeapon weaponScript;
@@ -26,12 +28,18 @@ public class CombatControl : NetworkBehaviour {
         if (isLocalPlayer)
         {
             Debug.Log("Player " + playerControllerId + " will now request weapon spawn");
-            CmdSpawnWeapon((int)Weapon.Pistol); //Server will spawn the default weapon
+            CmdSpawnWeapon((int)Weapon.MachineGun); //Server will spawn the default weapon
         }
         healthBar.value = maxHealth;
         health = maxHealth;
         selfCollider = GetComponentInChildren<Collider>();
 	}
+
+    public override void OnStartServer()
+    {
+        Debug.Log("Server bullet");
+        LocalData.isServerPlayer = true;
+    }
 
     //Server spawns a weapon for the player running this script
     [Command]
@@ -81,10 +89,19 @@ public class CombatControl : NetworkBehaviour {
         weapon = newWeapon;
         weapon.transform.parent = transform;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    
+
+    // Update is called once per frame
+    void Update () {
         healthBar.value = health;
+        if (isServer)
+        {
+            if(transform.position.y < -10)
+            {
+                this.Die();
+            }
+        }
         if (!isLocalPlayer)
             return;
 
@@ -125,10 +142,6 @@ public class CombatControl : NetworkBehaviour {
             Debug.Log("server noticed player death");
             Die();
             shooter.GetComponent<CombatControl>().GotAKill();
-            dead = true;
-            health = 100;
-            RpcRespawn();
-            Invoke("EndImmunity", 1f);
         }
     }
 
@@ -145,6 +158,10 @@ public class CombatControl : NetworkBehaviour {
     [Server]
     private void Die()
     {
+        dead = true;
+        health = 100;
+        RpcRespawn();
+        Invoke("EndImmunity", 1f);
         Debug.Log("Player " + GetComponent<PlayerScore>().playerID + " died");
         GetComponent<PlayerScore>().deaths++;
         //add a death
