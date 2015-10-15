@@ -19,10 +19,12 @@ public class CombatControl : NetworkBehaviour {
     public float maxHealth = 100;
     public Slider healthBar;
 
+    public float respawnImmuneTime = 1;
     public Collider selfCollider;
 
     bool dead = false;
     bool weaponChangeCooldown = false;
+    public AudioSource dyingScream;
 	// Use this for initialization
 	void Start () {
         if (isLocalPlayer)
@@ -160,8 +162,9 @@ public class CombatControl : NetworkBehaviour {
     {
         dead = true;
         health = 100;
+        RpcDie();
         RpcRespawn();
-        Invoke("EndImmunity", 1f);
+        Invoke("EndImmunity", respawnImmuneTime);
         Debug.Log("Player " + GetComponent<PlayerScore>().playerID + " died");
         GetComponent<PlayerScore>().deaths++;
         //add a death
@@ -170,6 +173,15 @@ public class CombatControl : NetworkBehaviour {
     private void EndImmunity()
     {
         dead = false;
+        healthBar.gameObject.SetActive(true);
+    }
+
+    [ClientRpc]
+    public void RpcDie()
+    {
+        dyingScream.Play();
+        healthBar.gameObject.SetActive(false);
+        Invoke("EndImmunity", respawnImmuneTime);
     }
 
     [ClientRpc]
@@ -180,10 +192,10 @@ public class CombatControl : NetworkBehaviour {
             GameObject spawnPoint = SpawnPoint.FindNearest(this.transform.position);
             if(spawnPoint != null)
             {
-                this.transform.position = spawnPoint.transform.position;
+                this.GetComponent<Rigidbody>().MovePosition(spawnPoint.transform.position);
             } else
             {
-                this.transform.position = new Vector3(0, 15, 0);
+                this.GetComponent<Rigidbody>().MovePosition(new Vector3(0, 15, 0));
             }
         }
             

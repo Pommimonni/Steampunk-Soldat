@@ -11,6 +11,7 @@ public class JetPack : NetworkBehaviour {
     public float spendRate;
     public float maxYVelocity;
     public Slider chargeBar;
+    public AudioSource jetSound;
 
     [SyncVar]
     float currentCharge;
@@ -41,12 +42,20 @@ public class JetPack : NetworkBehaviour {
                 currentCharge = maxCharge;
         }
         CmdInformCharge(currentCharge);
-	}
+        if(!throttleOn && jetSound.isPlaying)
+        {
+            jetSound.Stop();
+        }
+        if (throttleOn && !jetSound.isPlaying)
+        {
+            jetSound.Play();
+        }
+    }
 
     [Command]
     void CmdInformCharge(float newCharge)
     {
-        currentCharge = newCharge;
+        currentCharge = newCharge; //clients use jet slower, fix this
     }
     float yVel;
     void FixedUpdate()
