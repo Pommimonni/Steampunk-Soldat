@@ -15,33 +15,40 @@ public class JetPack : NetworkBehaviour {
 
     [SyncVar]
     float currentCharge;
+
+    float currentLocalCharge;
     
     bool throttleOn = false;
 
 	// Use this for initialization
 	void Start () {
         currentCharge = maxCharge;
+        currentLocalCharge = maxCharge;
         chargeBar.maxValue = maxCharge;
         chargeBar.value = maxCharge;
     }
-	
+
+    int count = 0;
 	// Update is called once per frame
 	void Update () {
         chargeBar.value = currentCharge;
         if (!isLocalPlayer)
+        {
             return;
+        }
+        chargeBar.value = currentLocalCharge;
         throttleOn = Input.GetMouseButton(1);
-        if (throttleOn && (currentCharge > 0))
+        if (throttleOn && (currentLocalCharge > 0))
         {
-            currentCharge -= spendRate;
+            currentLocalCharge -= spendRate;
         }
-        else if(currentCharge < maxCharge && !throttleOn)
+        else if(currentLocalCharge < maxCharge && !throttleOn)
         {
-            currentCharge += rechargeRate;
-            if (currentCharge > maxCharge)
-                currentCharge = maxCharge;
+            currentLocalCharge += rechargeRate;
+            if (currentLocalCharge > maxCharge)
+                currentLocalCharge = maxCharge;
         }
-        CmdInformCharge(currentCharge);
+        
         if(!throttleOn && jetSound.isPlaying)
         {
             jetSound.Stop();
@@ -50,17 +57,25 @@ public class JetPack : NetworkBehaviour {
         {
             jetSound.Play();
         }
+        if (count < 12)
+        {
+            count++;
+        } else
+        {
+            count = 0; //every 12th frame
+            CmdInformCharge(currentLocalCharge);
+        }
     }
 
     [Command]
     void CmdInformCharge(float newCharge)
     {
-        currentCharge = newCharge; //clients use jet slower, fix this
+        currentCharge = Mathf.Lerp(currentCharge, newCharge, Time.time * 0.2f);
     }
     float yVel;
     void FixedUpdate()
     {
-        if (throttleOn && (currentCharge > 0))
+        if (throttleOn && (currentLocalCharge > 0))
         {
             yVel = GetComponent<Rigidbody>().velocity.y;
             if(yVel < maxYVelocity)
