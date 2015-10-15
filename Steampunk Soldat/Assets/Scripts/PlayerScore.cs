@@ -11,25 +11,59 @@ public class PlayerScore : NetworkBehaviour {
     [SyncVar]
     public short playerID = -1;
     [SyncVar]
-    public int playerPing = -2;
+    public float playerPing = -2;
 
     static short IDCount = 1; //which id to give to next player
 
+    public NetworkPlayer[] connectionsHere;
+    
+    float sendTime;
+
 	// Use this for initialization
 	void Start () {
-        if (!isServer)
-            return;
-        SetPlayerID(); //the local player will get an ID from server that is synced to all
         if (isLocalPlayer)
         {
-            InvokeRepeating("RefreshPing", 1f, 2f);
-            
+            Debug.Log("Will start invoking ping refresh");
+            InvokeRepeating("RefreshPing", 1f, 5f);
+        }
+        if (isServer)
+            SetPlayerID(); //the local player will get an ID from server that is synced to all
+        
+    }
+
+    void RefreshPing() //called only on local player
+    {
+        Debug.Log("Refreshing pin");
+        if (!isServer)
+        {
+            StartBouncingPing();
+        } else
+        {
+            playerPing = 0;
         }
     }
 
-    void RefreshPing()
+    void StartBouncingPing()
     {
-        CmdUpdatePing(Network.GetAveragePing(Network.player));
+        sendTime = Time.time;
+        CmdServerBounce();
+    }
+
+    [Command]
+    void CmdServerBounce()
+    {
+        RpcBounceBack();
+    }
+
+    [ClientRpc]
+    void RpcBounceBack()
+    {
+        if (isLocalPlayer)
+        {
+            float ping = (Time.time - sendTime)*1000;
+            ping = Mathf.Floor(ping);
+            CmdUpdatePing(ping);
+        }
     }
     
     [Server]
@@ -37,7 +71,7 @@ public class PlayerScore : NetworkBehaviour {
     {
         if(GetComponent<EnemyAI>() != null)
         {
-            playerID = 666;
+            playerID = 41;
             return;
         }
         playerID = IDCount++;
@@ -51,8 +85,9 @@ public class PlayerScore : NetworkBehaviour {
 	}
 
     [Command]
-    void CmdUpdatePing(int newPing)
+    void CmdUpdatePing(float newPing)
     {
+        Debug.Log("Server Received new ping for player "+playerID+ ": " + newPing);
         playerPing = newPing;
     }
 

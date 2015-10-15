@@ -36,7 +36,7 @@ public class ScoreBoard : MonoBehaviour {
             foreach (PlayerScore nScore in allScores)
             {
                 scoreRows[index].SetActive(true);
-                scoreRows[index++].GetComponentInChildren<Text>().text = "Player "+nScore.playerID+ ": \t\tKills: " + nScore.kills+ " \t\tDeaths: " + nScore.deaths + " \t\tPing: " + nScore.playerPing;
+                scoreRows[index++].GetComponentInChildren<Text>().text = "Player "+nScore.playerID+ ": \t\tKills: " + nScore.kills+ " \t\tDeaths: " + nScore.deaths + " \t\tPing: " + nScore.playerPing+" ms";
             }
             for(int a = index; a < scoreRows.Count; a++)
             {
