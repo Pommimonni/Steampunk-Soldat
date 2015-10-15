@@ -12,6 +12,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     public int ammoPerClip = 40;
     public GameObject bulletPrefab;
     public Transform barrelEnd;
+    public GameObject shellPrefab;
 
     public IWeaponSpec weaponSpec; //for future use
 
@@ -206,7 +207,18 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
         bulletRB.velocity = towards * bulletSpeed;
         Destroy(bullet, 3.0f);
+        DropShell((this.transform.position + from) / 2);
+    }
 
+    void DropShell(Vector3 from)
+    {
+        GameObject shell = (GameObject)Instantiate(shellPrefab, from, Quaternion.identity);
+        Rigidbody shellRB = shell.GetComponent<Rigidbody>();
+        Vector3 shellRandomDir = new Vector3(0.5f*(Random.value - 0.5f), 0, Random.value - 0.5f) * 35f;
+        Vector3 shellDir = Vector3.up * 20 + shellRandomDir;
+        shellRB.AddForce(shellDir * 10);
+        shellRB.AddTorque(new Vector3(0.5f * (Random.value - 0.5f), 0, Random.value - 0.5f) * 35f);
+        Destroy(shell, 5.0f);
     }
 
     //Server asks everyone to play sound
