@@ -225,7 +225,14 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     [ClientRpc]
     public void RpcShootSound()
     {
-        GetComponent<AudioSource>().Play();
+        if(GetComponent<RandomAudio>() != null)
+        {
+            GetComponent<RandomAudio>().Play();
+        } else if (GetComponent<AudioSource>() != null)
+        {
+            GetComponent<AudioSource>().Play();
+        }
+            
     }
 
     void ClearCooldown()
