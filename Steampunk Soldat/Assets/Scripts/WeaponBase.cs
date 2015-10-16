@@ -11,14 +11,16 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     public float inaccurasy = 0;
     public int ammoPerClip = 40;
     public GameObject bulletPrefab;
+    
     public Transform barrelEnd;
     public GameObject shellPrefab;
+
+    public RandomAudio shootSound;
+    public AudioSource reloadSound;
 
     public IWeaponSpec weaponSpec; //for future use
 
     protected bool onCooldown = false;
-
-    protected AudioSource shootingSound;
 
     [SyncVar]
     public NetworkInstanceId weaponOwnerNetID;
@@ -60,7 +62,6 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     // Use this for initialization
     void Start()
     {
-        shootingSound = GetComponent<AudioSource>();
         ammoLeftInClip = ammoPerClip;
     }
 
@@ -73,12 +74,6 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
             
             ShootingRequest(); //sends a request to server to shoot
         }
-    }
-
-    [ClientRpc]
-    public void RpcShootingSound()
-    {
-        shootingSound.Play(); //bang
     }
 
     public bool Cooldown()
@@ -97,6 +92,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Debug.Log("reloading!");
         onCooldown = onCD;
         Invoke("ClearReload", reloadTime);
+        reloadSound.Play();
     }
 
     public void ClearReload()
@@ -152,7 +148,6 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         //StartCoroutine(DelayedShoot(from, towards));
         HandleShoot(from, towards);
         RpcShootSim(from, towards);
-        RpcShootSound(); //called on all clients
     }
 
     IEnumerator DelayedShoot(Vector3 from, Vector3 towards)
@@ -208,6 +203,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         bulletRB.velocity = towards * bulletSpeed;
         Destroy(bullet, 3.0f);
         DropShell((this.transform.position + from) / 2);
+        ShootSound();
     }
 
     void DropShell(Vector3 from)
@@ -221,18 +217,12 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Destroy(shell, 5.0f);
     }
 
-    //Server asks everyone to play sound
-    [ClientRpc]
-    public void RpcShootSound()
+    public void ShootSound()
     {
-        if(GetComponent<RandomAudio>() != null)
+        if(shootSound != null)
         {
-            GetComponent<RandomAudio>().Play();
-        } else if (GetComponent<AudioSource>() != null)
-        {
-            GetComponent<AudioSource>().Play();
-        }
-            
+            shootSound.Play();
+        }   
     }
 
     void ClearCooldown()

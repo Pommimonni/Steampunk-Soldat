@@ -13,7 +13,7 @@ public class CombatControl : NetworkBehaviour {
     public GameObject weapon;
     IWeapon weaponScript;
 
-    [SyncVar]
+    [SyncVar(hook = "HealthChanged")]
     public float health = 100;
 
     public float maxHealth = 100;
@@ -25,8 +25,9 @@ public class CombatControl : NetworkBehaviour {
     bool dead = false;
     bool weaponChangeCooldown = false;
     public AudioSource dyingScream;
-	// Use this for initialization
-	void Start () {
+    public AudioSource bulletHit;
+    // Use this for initialization
+    void Start () {
         if (isLocalPlayer)
         {
             Debug.Log("Player " + playerControllerId + " will now request weapon spawn");
@@ -200,5 +201,12 @@ public class CombatControl : NetworkBehaviour {
         }
             
     }
-    
+
+    private void HealthChanged(float h)
+    {
+        Debug.Log("h " + h + " curheal " + health);
+        health = h;
+        bulletHit.Play();
+    }
+
 }

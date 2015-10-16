@@ -58,7 +58,8 @@ public class Bullet : MonoBehaviour {
         if (other.layer == LayerMask.NameToLayer("Ground"))
         {
             Debug.Log("Bullet hit ground");
-            Destroy(gameObject);
+            GetComponent<AudioSource>().Play();
+            Destroy(gameObject, 1f);
         }
         if (other.layer == LayerMask.NameToLayer("Player"))
         {
@@ -74,28 +75,4 @@ public class Bullet : MonoBehaviour {
         
     }
 
-    void OnTriggerEnterOld(Collider otherCollider)
-    {
-        //if (!isServer || alreadyTriggered) //server/host handles the bullets
-            //return;
-        Debug.Log("Bullet collided on server");
-        GameObject other = otherCollider.gameObject;
-        if (other.layer == LayerMask.NameToLayer("Bullet"))
-        {
-            return;
-        }
-        alreadyTriggered = true; //avoid possible double triggers
-        if (other.layer == LayerMask.NameToLayer("Ground"))
-        {
-            Debug.Log("Bullet hit ground");
-            Destroy(gameObject);
-        }
-        if (other.layer == LayerMask.NameToLayer("Player"))
-        {
-            Debug.Log("Bullet hit player");
-            other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage, owner);
-            Destroy(gameObject);
-            //play sound
-        }
-    }
 }
