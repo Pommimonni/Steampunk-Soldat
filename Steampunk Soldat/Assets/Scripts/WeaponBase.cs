@@ -51,6 +51,10 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         if (!weaponOwner.GetComponent<NetworkIdentity>().isLocalPlayer)
         {
             GetComponent<PointToCursor>().enabled = false;
+        } else
+        {
+            Animator an = weaponOwner.GetComponentInChildren<Animator>();
+            GetComponent<PointToCursor>().SetAnimator(an);
         }
     }
 
@@ -204,6 +208,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Destroy(bullet, 3.0f);
         DropShell((this.transform.position + from) / 2);
         ShootSound();
+        GetComponent<NetworkSyncLocalRotation>().cmc.TriggerShoot();
     }
 
     void DropShell(Vector3 from)

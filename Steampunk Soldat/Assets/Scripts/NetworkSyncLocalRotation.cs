@@ -9,10 +9,14 @@ public class NetworkSyncLocalRotation : NetworkBehaviour {
 
     NetworkIdentity owner;
 
+    public CharacterModelControl cmc;
+
 	// Use this for initialization
 	void Start () {
         currentLocalRot = Quaternion.identity;
         this.transform.localPosition = new Vector3(0, 0, 0);
+        owner = transform.parent.GetComponent<NetworkIdentity>();
+        cmc = transform.parent.gameObject.GetComponentInChildren<CharacterModelControl>();
     }
 
     [Command]
@@ -24,7 +28,6 @@ public class NetworkSyncLocalRotation : NetworkBehaviour {
     // Update is called once per frame
     int count = 0;
 	void Update () {
-        owner = transform.parent.GetComponent<NetworkIdentity>();
         if (owner.isLocalPlayer)
         {
             count++;
@@ -34,13 +37,15 @@ public class NetworkSyncLocalRotation : NetworkBehaviour {
                 CmdSetRotation(currentLocalRot);
                 count = 0;
             }
-            
+
+            cmc.SetArmDirection(this.transform.localRotation);
             //Debug.Log("is local in rotation sync");
         }
         else
         {
             //Debug.Log("is not local in rotation sync");
             this.transform.localRotation = currentLocalRot;
+            cmc.SetArmDirection(this.transform.localRotation);
         }
         
     }
