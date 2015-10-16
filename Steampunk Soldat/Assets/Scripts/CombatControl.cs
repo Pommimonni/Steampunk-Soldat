@@ -204,7 +204,6 @@ public class CombatControl : NetworkBehaviour {
 
     private void HealthChanged(float h)
     {
-        Debug.Log("h " + h + " curheal " + health);
         health = h;
         if(health != maxHealth)
             bulletHit.Play();
