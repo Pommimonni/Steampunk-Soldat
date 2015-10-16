@@ -26,6 +26,8 @@ public class AudioProgression : MonoBehaviour {
         {
             CancelInvoke();
             Invoke("StartBuildUp", TimeUntilClipEnd());
+            if (delayPrediction > 0.2f)
+                delayPrediction = 0.2f;
         }
     }
 
@@ -67,6 +69,7 @@ public class AudioProgression : MonoBehaviour {
     void Start () {
         Debug.Log("Audio prog start, Should only be called in splash screen");
         gameObject.SendMessage("OnLevelWasLoaded", Application.loadedLevel); //so it gets called in splash screen also in the beginning
+        buildUp.LoadAudioData();
     }
 	
 	// Update is called once per frame

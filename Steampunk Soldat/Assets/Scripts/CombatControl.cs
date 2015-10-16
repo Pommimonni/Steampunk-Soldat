@@ -206,7 +206,8 @@ public class CombatControl : NetworkBehaviour {
     {
         Debug.Log("h " + h + " curheal " + health);
         health = h;
-        bulletHit.Play();
+        if(health != maxHealth)
+            bulletHit.Play();
     }
 
 }
