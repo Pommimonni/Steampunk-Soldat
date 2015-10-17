@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter(Collider otherCollider) //local sim just destroys the bullet, server applies dmg
     {
-        if (alreadyTriggered)
+        if (alreadyTriggered || (owner == otherCollider.gameObject))
         {
             return;
         }
@@ -52,6 +52,7 @@ public class Bullet : MonoBehaviour {
         GameObject other = otherCollider.gameObject;
         if (other.layer == LayerMask.NameToLayer("Bullet"))
         {
+            Debug.Log("Bullet hit bullet");
             return;
         }
         alreadyTriggered = true; //avoid possible double triggers

@@ -9,6 +9,7 @@ public interface IWeapon {
     float GetDamage();
     bool Cooldown();
     void SetCooldown(bool onCD);
+    void SetCooldown(bool onCD, float customTime);
     void SetParent(NetworkInstanceId netID);
     [Command]
     void CmdShoot(Vector3 from, Vector3 towards);

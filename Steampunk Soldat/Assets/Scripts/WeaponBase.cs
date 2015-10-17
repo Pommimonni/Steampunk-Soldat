@@ -31,7 +31,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     protected int ammoLeftInClip = 40;
 
     CharacterModelControl cmc;
-    
+    CombatControl cc;
 
 
     public override void OnStartClient()
@@ -50,6 +50,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         transform.SetParent(cmc.weaponHand.transform, false);
         transform.localPosition = Vector3.zero;
         weaponOwner.GetComponent<CombatControl>().SetWeapon(this);
+        cc = weaponOwner.GetComponent<CombatControl>();
         // Debug.Log("Parent set");
         weaponOwnerCollider = weaponOwner.GetComponentInChildren<Collider>();
     }
@@ -87,6 +88,12 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Invoke("ClearCooldown", cooldown);
     }
 
+    public void SetCooldown(bool onCD, float customTime)
+    {
+        onCooldown = onCD;
+        Invoke("ClearCooldown", customTime);
+    }
+
     public void SetReload(bool onCD)
     {
         Debug.Log("reloading!");
@@ -109,7 +116,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     //Runs on client
     public void ShootingRequest()
     {
-        if (!Cooldown())
+        if (!Cooldown() && !cc.dead)
         {
             Debug.Log("Gun not on cooldown");
             Debug.Log("requesting to shoot");

@@ -24,11 +24,14 @@ public class PlayerControl : NetworkBehaviour {
     bool grounded = false;
     public GameObject groundCheckObject;
 
+    Vector3 respawnTarget;
+
     // Use this for initialization
     void Start () {
         //Debug.Log("is local"+isLocalPlayer);
         if (isLocalPlayer)
             gameObject.AddComponent<AudioListener>();
+        respawnTarget = new Vector3(0, 35, 0);
     }
 	
 	// Update is called once per frame
@@ -37,7 +40,8 @@ public class PlayerControl : NetworkBehaviour {
             return;
         
         CheckJump();
-        MoveCamera();
+        if(!GetComponent<CombatControl>().dead)
+            MoveCamera();
 	}
 
     
@@ -46,7 +50,14 @@ public class PlayerControl : NetworkBehaviour {
 
     void FixedUpdate()
     {
-        if (!isLocalPlayer)
+        Rigidbody rigidBody = GetComponent<Rigidbody>();
+        Vector3 zToZero = new Vector3(rigidBody.position.x, rigidBody.position.y, 0);
+        rigidBody.MovePosition(zToZero);
+        if (GetComponent<CombatControl>().respawning)
+        {
+            rigidBody.MovePosition(respawnTarget);
+        }
+        if (!isLocalPlayer || GetComponent<CombatControl>().dead)
             return;
 
         grounded = GroundCheck();
@@ -118,6 +129,12 @@ public class PlayerControl : NetworkBehaviour {
         }
     }
 
+
+    public void SetRespawnTarget(Vector3 newTar)
+    {
+        Debug.Log("setting spawn target: " + newTar);
+        respawnTarget = newTar;
+    }
    
 
     //how long has the jump key been held down and how should it affect the jump
@@ -197,6 +214,7 @@ public class PlayerControl : NetworkBehaviour {
         {
             rigidBody.AddForce(new Vector3(acceleration / (1+xSpeed), 0, 0));
         }
+        
     }
 
     //the center of the screen should be between the player's character and mouse pointer

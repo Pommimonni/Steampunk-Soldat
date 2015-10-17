@@ -20,9 +20,10 @@ public class CombatControl : NetworkBehaviour {
     public Slider healthBar;
 
     public float respawnImmuneTime = 1;
+    public float respawnTime = 2;
     public Collider selfCollider;
 
-    bool dead = false;
+    public bool dead = false;
     bool weaponChangeCooldown = false;
     public AudioSource dyingScream;
     public AudioSource bulletHit;
@@ -78,7 +79,6 @@ public class CombatControl : NetworkBehaviour {
     //on the weapon side, when the weapon spawns on the client, the parenting is set and SetWeapon is called to set the weaponScript here
 
     //when the weapon spawns on client it will call this
-    [Client]
     public void SetWeapon(IWeapon newWeapon)
     {
         weaponScript = newWeapon;
@@ -161,10 +161,10 @@ public class CombatControl : NetworkBehaviour {
     private void Die()
     {
         dead = true;
-        health = 100;
+        health = maxHealth;
         RpcDie();
-        Respawn();
-        Invoke("EndImmunity", respawnImmuneTime);
+        //Respawn();
+        //Invoke("EndImmunity", respawnTime + respawnImmuneTime);
         Debug.Log("Player " + GetComponent<PlayerScore>().playerID + " died");
         GetComponent<PlayerScore>().deaths++;
         //add a death
@@ -173,6 +173,7 @@ public class CombatControl : NetworkBehaviour {
     private void EndImmunity()
     {
         dead = false;
+        respawning = false;
         healthBar.gameObject.SetActive(true);
     }
 
@@ -181,24 +182,40 @@ public class CombatControl : NetworkBehaviour {
     {
         dyingScream.Play();
         healthBar.gameObject.SetActive(false);
-        Invoke("EndImmunity", respawnImmuneTime);
+        dead = true;
+        Invoke("EndImmunity", respawnTime + respawnImmuneTime);
+        if (isLocalPlayer || (isServer && GetComponent<EnemyAI>() != null))
+        {
+            //if(GetComponent<PlayerControl>() != null)
+                //GetComponent<PlayerControl>().enabled = false;
+            //RigidbodyConstraints rbc = RigidbodyConstraints.None;
+            //GetComponent<Rigidbody>().constraints = rbc;
+            Invoke("Respawn", respawnTime);
+        }
     }
+
+    public bool respawning = false;
     
-    [Server]
     public void Respawn()
     {
-        if (isServer || (isServer && GetComponent<EnemyAI>() != null))
+        respawning = true;
+        GameObject spawnPoint = SpawnPoint.FindNearest(this.transform.position);
+        if(spawnPoint != null)
         {
-            GameObject spawnPoint = SpawnPoint.FindNearest(this.transform.position);
-            if(spawnPoint != null)
+            if(this.GetComponent<PlayerControl>() != null)
             {
-                this.GetComponent<Rigidbody>().MovePosition(spawnPoint.transform.position);
-            } else
-            {
-                this.GetComponent<Rigidbody>().MovePosition(new Vector3(0, 15, 0));
+                Debug.Log("cc setting spawn target: " + spawnPoint.transform.position);
+                this.GetComponent<PlayerControl>().SetRespawnTarget(spawnPoint.transform.position);
             }
+                
+            this.GetComponent<Rigidbody>().MovePosition(spawnPoint.transform.position);
         }
-            
+        //dead = false;
+        //GetComponent<Rigidbody>().constraints = RigidbodyConstraints.
+        //RigidbodyConstraints rbc = RigidbodyConstraints.;
+        //if (GetComponent<PlayerControl>() != null)
+            //GetComponent<PlayerControl>().enabled = true;
+
     }
 
     private void HealthChanged(float h)
