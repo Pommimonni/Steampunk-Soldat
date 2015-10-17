@@ -10,6 +10,7 @@ public class SetCursor : MonoBehaviour {
     void Start()
     {
         Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
+        Application.targetFrameRate = 60;
     }
     
 }

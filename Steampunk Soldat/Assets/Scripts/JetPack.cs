@@ -31,39 +31,12 @@ public class JetPack : NetworkBehaviour {
     int count = 0;
 	// Update is called once per frame
 	void Update () {
-        chargeBar.value = currentCharge;
         if (!isLocalPlayer)
         {
-            return;
-        }
-        chargeBar.value = currentLocalCharge;
-        throttleOn = Input.GetMouseButton(1);
-        if (throttleOn && (currentLocalCharge > 0))
-        {
-            currentLocalCharge -= spendRate;
-        }
-        else if(currentLocalCharge < maxCharge && !throttleOn)
-        {
-            currentLocalCharge += rechargeRate;
-            if (currentLocalCharge > maxCharge)
-                currentLocalCharge = maxCharge;
-        }
-        
-        if(!throttleOn && jetSound.isPlaying)
-        {
-            jetSound.Stop();
-        }
-        if (throttleOn && !jetSound.isPlaying)
-        {
-            jetSound.Play();
-        }
-        if (count < 12)
-        {
-            count++;
+            chargeBar.value = currentCharge;
         } else
         {
-            count = 0; //every 12th frame
-            CmdInformCharge(currentLocalCharge);
+            chargeBar.value = currentLocalCharge;
         }
     }
 
@@ -75,6 +48,39 @@ public class JetPack : NetworkBehaviour {
     float yVel;
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        throttleOn = Input.GetMouseButton(1);
+        if (throttleOn && (currentLocalCharge > 0))
+        {
+            currentLocalCharge -= spendRate;
+        }
+        else if (currentLocalCharge < maxCharge && !throttleOn)
+        {
+            currentLocalCharge += rechargeRate;
+            if (currentLocalCharge > maxCharge)
+                currentLocalCharge = maxCharge;
+        }
+
+        if (!throttleOn && jetSound.isPlaying)
+        {
+            jetSound.Stop();
+        }
+        if (throttleOn && !jetSound.isPlaying)
+        {
+            jetSound.Play();
+        }
+        if (count < 12)
+        {
+            count++;
+        }
+        else
+        {
+            count = 0; //every 12th frame
+            CmdInformCharge(currentLocalCharge);
+        }
         if (throttleOn && (currentLocalCharge > 0))
         {
             yVel = GetComponent<Rigidbody>().velocity.y;

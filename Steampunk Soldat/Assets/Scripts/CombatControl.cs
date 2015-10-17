@@ -164,7 +164,7 @@ public class CombatControl : NetworkBehaviour {
         dead = true;
         health = 100;
         RpcDie();
-        RpcRespawn();
+        Respawn();
         Invoke("EndImmunity", respawnImmuneTime);
         Debug.Log("Player " + GetComponent<PlayerScore>().playerID + " died");
         GetComponent<PlayerScore>().deaths++;
@@ -184,11 +184,11 @@ public class CombatControl : NetworkBehaviour {
         healthBar.gameObject.SetActive(false);
         Invoke("EndImmunity", respawnImmuneTime);
     }
-
-    [ClientRpc]
-    public void RpcRespawn()
+    
+    [Server]
+    public void Respawn()
     {
-        if (isLocalPlayer || (isServer && GetComponent<EnemyAI>() != null))
+        if (isServer || (isServer && GetComponent<EnemyAI>() != null))
         {
             GameObject spawnPoint = SpawnPoint.FindNearest(this.transform.position);
             if(spawnPoint != null)
