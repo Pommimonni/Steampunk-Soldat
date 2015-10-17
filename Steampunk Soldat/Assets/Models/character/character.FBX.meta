@@ -100,7 +100,7 @@ ModelImporter:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     optimizeGameObjects: 0
-    motionNodeName: 
+    motionNodeName: <Root Transform>
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -358,7 +358,9 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
         weight: 1
-      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbone
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
         weight: 1
@@ -379,7 +381,7 @@ ModelImporter:
     - serializedVersion: 16
       name: pistolShoot
       takeName: Take 001
-      firstFrame: 100
+      firstFrame: 103
       lastFrame: 110
       wrapMode: 0
       orientationOffsetY: 0
