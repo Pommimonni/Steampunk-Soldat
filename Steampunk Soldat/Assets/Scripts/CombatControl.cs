@@ -67,8 +67,7 @@ public class CombatControl : NetworkBehaviour {
         {
             Destroy(weapon);
         }
-        weapon = (GameObject)Instantiate(weaponList[choise], transform.position, transform.rotation);
-        weapon.transform.parent = transform;
+        weapon = (GameObject)Instantiate(weaponList[choise], Vector3.zero, Quaternion.identity);
         weaponScript = weapon.GetComponent<IWeapon>();
         Debug.Log("Setting net ID to weapon: " + this.netId);
         Debug.Log("For: " + weapon +" Script: "+weaponScript);

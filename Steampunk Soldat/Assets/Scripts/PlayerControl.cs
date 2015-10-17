@@ -38,23 +38,9 @@ public class PlayerControl : NetworkBehaviour {
         
         CheckJump();
         MoveCamera();
-        Turn();
 	}
 
-    void Turn()
-    {
-        Vector3 cPos = Camera.main.transform.position;
-        Vector3 mPos = Input.mousePosition;
-        Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -cPos.z));
-        if (mWorldPos.x < gameObject.transform.position.x)
-        {
-            gameObject.transform.rotation = Quaternion.Euler(0, -90, 0);
-        }
-        else
-        {
-            gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
-        }
-    }
+    
     
     
 

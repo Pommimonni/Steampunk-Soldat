@@ -29,6 +29,8 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
 
     [SyncVar]
     protected int ammoLeftInClip = 40;
+
+    CharacterModelControl cmc;
     
 
 
@@ -39,23 +41,17 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         // and set it to be our transform's parent.
 
         base.OnStartClient();
-        //Debug.Log("revolver started on client");
+        Debug.Log("revolver started on client");
         // Debug.Log("For: " + gameObject + " Script: " + this);
         //Debug.Log("Trying to find: " + parentNetId);
         weaponOwner = ClientScene.FindLocalObject(weaponOwnerNetID);
         //Debug.Log("Parent object: " + parentObject);
-        transform.parent = weaponOwner.transform;
+        cmc = weaponOwner.GetComponentInChildren<CharacterModelControl>();
+        transform.SetParent(cmc.weaponHand.transform, false);
+        transform.localPosition = Vector3.zero;
         weaponOwner.GetComponent<CombatControl>().SetWeapon(this);
         // Debug.Log("Parent set");
         weaponOwnerCollider = weaponOwner.GetComponentInChildren<Collider>();
-        if (!weaponOwner.GetComponent<NetworkIdentity>().isLocalPlayer)
-        {
-            GetComponent<PointToCursor>().enabled = false;
-        } else
-        {
-            Animator an = weaponOwner.GetComponentInChildren<Animator>();
-            GetComponent<PointToCursor>().SetAnimator(an);
-        }
     }
 
     public void SetParent(NetworkInstanceId newParent)
@@ -208,7 +204,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Destroy(bullet, 3.0f);
         DropShell((this.transform.position + from) / 2);
         ShootSound();
-        GetComponent<NetworkSyncLocalRotation>().cmc.TriggerShoot();
+        cmc.TriggerShoot();
     }
 
     void DropShell(Vector3 from)

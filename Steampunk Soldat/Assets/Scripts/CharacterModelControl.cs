@@ -1,26 +1,104 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class CharacterModelControl : MonoBehaviour {
+public class CharacterModelControl : NetworkBehaviour {
 
-    public float armDirection;
+    
     public bool localPlay = false;
     public float roll = 0;
-	// Use this for initialization
-	void Start () {
-	
-	}
+    public GameObject weaponHand;
+
+    [SyncVar]
+    public float armDirection;
+    float localArmDirection;
+
+    NetworkIdentity netID;
+
+    public Animator anim;
+
+
+    // Use this for initialization
+    void Start () {
+        Debug.Log("start in cmc");
+        netID = GetComponent<NetworkIdentity>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        TurnCharacter();
-        SetXSpeed(transform.parent.GetComponent<Rigidbody>().velocity.x);
-    }
-
-    void TurnCharacter()
-    {
+        SetXSpeed(GetComponent<Rigidbody>().velocity.x);
+        if (netID.isLocalPlayer)
+        {
+            AimAtCursor();
+            Turn();
+        }
+            
         
     }
+
+    float faceDir = 1;
+    void Turn()
+    {
+        Vector3 cPos = Camera.main.transform.position;
+        Vector3 mPos = Input.mousePosition;
+        Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -cPos.z));
+        if (mWorldPos.x < gameObject.transform.position.x)
+        {
+            gameObject.transform.rotation = Quaternion.Euler(0, -90, 0);
+            faceDir = -1;
+        }
+        else
+        {
+            gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+            faceDir = 1;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        NetSyncAimDirection();
+    }
+
+    int count = 0;
+    void NetSyncAimDirection()
+    {
+        if (netID.isLocalPlayer)
+        {
+            count++;
+            if (count > 6)
+            {
+                CmdSetArmDirection(localArmDirection);
+                count = 0;
+            }
+        }
+        else
+        {
+            SetArmDirection(armDirection);
+        }
+    }
+
+    [Command]
+    void CmdSetArmDirection(float newArmDir)
+    {
+        this.armDirection = newArmDir;
+    }
+
+    void AimAtCursor()
+    {
+        //Debug.Log("LOCAL AIMING");
+        Vector3 pPos = transform.position;
+        Vector3 mPos = Input.mousePosition;
+        //Debug.Log("Mouse: " + mPos);
+        Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -Camera.main.transform.position.z));
+
+        Vector3 shootDirection = (mWorldPos - pPos);
+        shootDirection.z = 0; // just to be sure
+        shootDirection.Normalize();
+
+        SetArmDirection(shootDirection.y);
+        localArmDirection = shootDirection.y;
+    }
+    
     public void SetArmDirection(Quaternion q)
     {
         
@@ -33,20 +111,27 @@ public class CharacterModelControl : MonoBehaviour {
             armDirection *= armDirection;
             armDirection *= 0.5f;
         }
-        this.GetComponent<Animator>().SetFloat("aimDirection", armDirection);
+        anim.SetFloat("aimDirection", armDirection);
     }
     public void SetArmDirection(float direction)
     {
-        this.GetComponent<Animator>().SetFloat("aimDirection", direction);
+        float adjustedDirection = direction;
+        if (adjustedDirection > 0)
+        {
+            adjustedDirection *= adjustedDirection;
+            adjustedDirection *= 0.5f;
+        }
+        anim.SetFloat("aimDirection", direction);
     }
     public void SetXSpeed(float speed)
     {
-        //Debug.Log("x speed: " + speed);
-        float a = Mathf.Abs(speed/3);
-        this.GetComponent<Animator>().SetFloat("rolling", a);
+        
+        float a = (speed / 6)*faceDir;
+        //Debug.Log("x speed: " + a);
+        anim.SetFloat("rolling", a);
     }
     public void TriggerShoot()
     {
-        this.GetComponent<Animator>().SetTrigger("shooting");
+        anim.SetTrigger("shooting");
     }
 }
