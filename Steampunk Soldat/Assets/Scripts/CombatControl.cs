@@ -160,6 +160,8 @@ public class CombatControl : NetworkBehaviour {
     [Server]
     private void Die()
     {
+        if (dead)
+            return;
         dead = true;
         health = maxHealth;
         RpcDie();

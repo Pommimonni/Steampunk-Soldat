@@ -12,14 +12,15 @@ public class ScoreBoard : MonoBehaviour {
     // Use this for initialization
     void Start () {
         scoreBoardUI.SetActive(false);
-        
+        LocalData.gameEnded = false;
+        scoresVisible = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
 
         //bg.SetActive(Input.GetKey(KeyCode.Tab));
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) || (LocalData.gameEnded && !scoresVisible))
         {
             scoresVisible = true;
             scoreBoardUI.SetActive(true);
@@ -37,6 +38,7 @@ public class ScoreBoard : MonoBehaviour {
             {
                 scoreRows[index].SetActive(true);
                 scoreRows[index++].GetComponentInChildren<Text>().text = "Player "+nScore.playerID+ ": \t\tKills: " + nScore.kills+ " \t\tDeaths: " + nScore.deaths + " \t\tPing: " + nScore.playerPing+" ms";
+                
             }
             for(int a = index; a < scoreRows.Count; a++)
             {
@@ -47,11 +49,11 @@ public class ScoreBoard : MonoBehaviour {
             scoreBoardUI.SetActive(false);
             scoresVisible = false;
         }
-        if(scoresVisible && !Input.GetKey(KeyCode.Tab))
+        if(scoresVisible && !Input.GetKey(KeyCode.Tab) && !LocalData.gameEnded)
         {
             scoreBoardUI.SetActive(false);
         }
-        
+
     }
 
     List<PlayerScore> FindAllScores()

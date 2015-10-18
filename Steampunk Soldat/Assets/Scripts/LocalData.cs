@@ -7,4 +7,5 @@ using System.Text;
 static class LocalData
 {
     public static bool isServerPlayer = false;
+    public static bool gameEnded = false;
 }

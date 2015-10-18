@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PlayerScore : NetworkBehaviour {
 
-    [SyncVar]
+    [SyncVar (hook = "Killed")]
     public int kills = 0;
     [SyncVar]
     public int deaths = 0;
@@ -19,8 +19,11 @@ public class PlayerScore : NetworkBehaviour {
     
     float sendTime;
 
+    public int winningKillAmount = 20;
+
 	// Use this for initialization
 	void Start () {
+        LocalData.gameEnded = false;
         if (isLocalPlayer)
         {
             Debug.Log("Will start invoking ping refresh");
@@ -33,7 +36,7 @@ public class PlayerScore : NetworkBehaviour {
 
     void RefreshPing() //called only on local player
     {
-        Debug.Log("Refreshing pin");
+        //Debug.Log("Refreshing pin");
         if (!isServer)
         {
             StartBouncingPing();
@@ -65,6 +68,37 @@ public class PlayerScore : NetworkBehaviour {
             CmdUpdatePing(ping);
         }
     }
+
+    void Killed(int newKills)
+    {
+        kills = newKills;
+        if (isServer)
+        {
+            if (newKills >= winningKillAmount)
+            {
+                RpcGameOver();
+                Invoke("RestartLevel", 4f);
+            }
+        }
+        
+    }
+
+    [ClientRpc]
+    void RpcGameOver()
+    {
+        LocalData.gameEnded = true;
+    }
+
+    void OnLevelWasLoaded(int level)
+    {
+        Debug.Log("loaded level playscor " + level);
+        LocalData.gameEnded = false;
+    }
+
+    void RestartLevel()
+    {
+        NetworkManager.singleton.ServerChangeScene("Map1(LauriDev)");
+    }
     
     [Server]
     void SetPlayerID()
@@ -81,13 +115,12 @@ public class PlayerScore : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
 	}
 
     [Command]
     void CmdUpdatePing(float newPing)
     {
-        Debug.Log("Server Received new ping for player "+playerID+ ": " + newPing);
+        //Debug.Log("Server Received new ping for player "+playerID+ ": " + newPing);
         playerPing = newPing;
     }
 
