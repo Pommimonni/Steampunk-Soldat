@@ -44,12 +44,12 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter(Collider otherCollider) //local sim just destroys the bullet, server applies dmg
     {
-        if (alreadyTriggered || (owner == otherCollider.gameObject))
+        if (alreadyTriggered || (owner == otherCollider.transform.parent.gameObject))
         {
             return;
         }
         Debug.Log("Bullet collided");
-        GameObject other = otherCollider.gameObject;
+        GameObject other = otherCollider.transform.parent.gameObject;
         if (other.layer == LayerMask.NameToLayer("Bullet"))
         {
             Debug.Log("Bullet hit bullet");
@@ -59,7 +59,7 @@ public class Bullet : MonoBehaviour {
         if (other.layer == LayerMask.NameToLayer("Ground"))
         {
             Debug.Log("Bullet hit ground");
-            GetComponent<AudioSource>().Play();
+            GetComponent<RandomAudio>().Play();
             Destroy(gameObject, 1f);
         }
         if (other.layer == LayerMask.NameToLayer("Player"))

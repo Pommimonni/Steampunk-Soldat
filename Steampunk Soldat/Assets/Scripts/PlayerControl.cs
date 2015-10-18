@@ -22,7 +22,7 @@ public class PlayerControl : NetworkBehaviour {
     bool sideStepping = false;
     bool sideStepLeft = false;
     bool grounded = false;
-    public GameObject groundCheckObject;
+    public GameObject[] groundCheckObjects;
 
     Vector3 respawnTarget;
 
@@ -241,8 +241,15 @@ public class PlayerControl : NetworkBehaviour {
     {
         //check if the player is on the ground
         int gcMask = 1 << LayerMask.NameToLayer("Ground");
-        Vector3 gcOrig = new Vector3(transform.position.x, transform.position.y, 0);
-        Vector3 gcEnd = new Vector3(groundCheckObject.transform.position.x, groundCheckObject.transform.position.y, 0);
-        return Physics.Linecast(gcOrig, gcEnd, gcMask); //raycast from player's character downwards to the groundcheck object
+        foreach(GameObject gco in groundCheckObjects)
+        {
+            Vector3 gcOrig = new Vector3(transform.position.x, transform.position.y, 0);
+            Vector3 gcEnd = new Vector3(gco.transform.position.x, gco.transform.position.y, 0);
+            if(Physics.Linecast(gcOrig, gcEnd, gcMask)) //raycast from player's character downwards to the groundcheck object
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
