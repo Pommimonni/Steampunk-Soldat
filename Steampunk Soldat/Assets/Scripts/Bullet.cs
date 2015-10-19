@@ -8,8 +8,9 @@ public class Bullet : MonoBehaviour {
     GameObject owner;
     //bool serverBullet = false;
 
+    public GameObject hitWallFX;
+    public GameObject hitPlayerFX;
     
-
     public void setDamage(float damage)
     {
         bulletDamage = damage;
@@ -60,6 +61,7 @@ public class Bullet : MonoBehaviour {
         {
             Debug.Log("Bullet hit ground");
             GetComponent<RandomAudio>().Play();
+            GameObject fx = (GameObject)GameObject.Instantiate(hitWallFX, gameObject.transform.position, Quaternion.Euler(GetComponent<Rigidbody>().velocity));
             Destroy(gameObject, 1f);
         }
         if (other.layer == LayerMask.NameToLayer("Player"))
@@ -70,6 +72,7 @@ public class Bullet : MonoBehaviour {
                 Debug.Log("Bullet hit player on SErver, applying dmg!");
                 other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage, owner);
             }
+            GameObject fx = (GameObject)GameObject.Instantiate(hitPlayerFX, gameObject.transform.position, Quaternion.Euler(GetComponent<Rigidbody>().velocity));
             Destroy(gameObject);
             //play sound
         }
