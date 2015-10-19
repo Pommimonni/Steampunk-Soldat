@@ -21,6 +21,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     public IWeaponSpec weaponSpec; //for future use
 
     protected bool onCooldown = false;
+    protected bool reloading = false;
 
     [SyncVar]
     public NetworkInstanceId weaponOwnerNetID;
@@ -98,12 +99,14 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     {
         Debug.Log("reloading!");
         onCooldown = onCD;
+        reloading = true;
         Invoke("ClearReload", reloadTime);
         reloadSound.Play();
     }
 
     public void ClearReload()
     {
+        reloading = false;
         onCooldown = false;
         ammoLeftInClip = ammoPerClip;
     }
@@ -225,7 +228,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Destroy(shell, 5.0f);
     }
 
-    public void ShootSound()
+    public virtual void ShootSound()
     {
         if(shootSound != null)
         {

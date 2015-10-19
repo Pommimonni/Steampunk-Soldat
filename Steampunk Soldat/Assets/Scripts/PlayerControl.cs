@@ -23,6 +23,7 @@ public class PlayerControl : NetworkBehaviour {
     bool sideStepLeft = false;
     bool grounded = false;
     public GameObject[] groundCheckObjects;
+    public AudioSource movementSound;
 
     Vector3 respawnTarget;
 
@@ -53,6 +54,15 @@ public class PlayerControl : NetworkBehaviour {
         Rigidbody rigidBody = GetComponent<Rigidbody>();
         Vector3 zToZero = new Vector3(rigidBody.position.x, rigidBody.position.y, 0);
         rigidBody.MovePosition(zToZero);
+        grounded = GroundCheck();
+        if (grounded)
+        {
+            movementSound.volume = rigidBody.velocity.magnitude / 12f;
+        }
+        else
+        {
+            movementSound.volume = 0;
+        }
         if (GetComponent<CombatControl>().respawning)
         {
             rigidBody.MovePosition(respawnTarget);
@@ -60,7 +70,7 @@ public class PlayerControl : NetworkBehaviour {
         if (!isLocalPlayer || GetComponent<CombatControl>().dead)
             return;
 
-        grounded = GroundCheck();
+        
         ForceMovement();
         if (sideStepping)
         {

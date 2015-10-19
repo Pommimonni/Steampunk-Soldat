@@ -20,12 +20,16 @@ public class ShellScript : MonoBehaviour {
 
     }
 
+    bool collidedOnce = false;
     void OnCollisionEnter(Collision collision)
     {
+        if (collidedOnce)
+            return;
         GameObject other = collision.collider.gameObject;
         if (other.layer == LayerMask.NameToLayer("Ground"))
         {
             GetComponent<RandomAudio>().Play();
+            collidedOnce = true;
         }
     }
 }

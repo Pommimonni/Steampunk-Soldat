@@ -11,7 +11,7 @@ public class JetPack : NetworkBehaviour {
     public float spendRate;
     public float maxYVelocity;
     public Slider chargeBar;
-    public AudioSource jetSound;
+    public MultiPhaseAudio jetSound;
 
     [SyncVar]
     float currentCharge;
@@ -19,6 +19,8 @@ public class JetPack : NetworkBehaviour {
     float currentLocalCharge;
     
     bool throttleOn = false;
+
+    int soundPhase = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -46,6 +48,8 @@ public class JetPack : NetworkBehaviour {
         currentCharge = Mathf.Lerp(currentCharge, newCharge, Time.time * 0.2f);
     }
     float yVel;
+    float soundChargeTime = 0.191f;
+    float currentSoundCharge = 0;
     void FixedUpdate()
     {
         if (!isLocalPlayer)
@@ -63,14 +67,36 @@ public class JetPack : NetworkBehaviour {
             if (currentLocalCharge > maxCharge)
                 currentLocalCharge = maxCharge;
         }
-
-        if (!throttleOn && jetSound.isPlaying)
+        if(currentLocalCharge <= 1 && jetSound.IsPlaying())
         {
-            jetSound.Stop();
+            jetSound.ResetToStart();
+            CmdStopSound();
         }
-        if (throttleOn && !jetSound.isPlaying)
+
+        if (!throttleOn && (soundPhase == 2 || soundPhase == 1))
         {
-            jetSound.Play();
+            soundPhase = 0;
+            jetSound.PlayOnce(3);
+            CmdStopSound();
+        }
+        if (throttleOn && currentLocalCharge > 0)
+        {
+            if(soundPhase == 0)
+            {
+                currentSoundCharge = 0;
+                soundPhase = 1;
+                jetSound.PlayOnce(soundPhase);
+            } else if (soundPhase == 1)
+            {
+                currentSoundCharge += Time.fixedDeltaTime;
+                if(currentSoundCharge > soundChargeTime)
+                {
+                    soundPhase = 2;
+                    jetSound.PlayLooped(soundPhase);
+                    CmdStartSound(); //start sound over network
+                }
+            }
+            
         }
         if (count < 12)
         {
@@ -90,5 +116,29 @@ public class JetPack : NetworkBehaviour {
                 GetComponent<Rigidbody>().AddForce(jetForce);
             }
         }
+    }
+    [Command]
+    void CmdStartSound()
+    {
+        RpcStartSound();
+    }
+    [Command]
+    void CmdStopSound()
+    {
+        RpcStopSound();
+    }
+    [ClientRpc]
+    void RpcStartSound()
+    {
+        if (isLocalPlayer)
+            return;
+        jetSound.Play(2);
+    }
+    [ClientRpc]
+    void RpcStopSound()
+    {
+        if (isLocalPlayer)
+            return;
+        jetSound.ResetToStart();
     }
 }
