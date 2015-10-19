@@ -44,12 +44,12 @@ public class CharacterModelControl : NetworkBehaviour {
         Vector3 mWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, -cPos.z));
         if (mWorldPos.x < gameObject.transform.position.x)
         {
-            gameObject.transform.rotation = Quaternion.Euler(0, -90, 0);
+            gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
             faceDir = -1;
         }
         else
         {
-            gameObject.transform.rotation = Quaternion.Euler(0, 90, 0);
+            gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
             faceDir = 1;
         }
     }
