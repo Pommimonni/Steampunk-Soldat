@@ -12,6 +12,7 @@ public class JetPack : NetworkBehaviour {
     public float maxYVelocity;
     public Slider chargeBar;
     public MultiPhaseAudio jetSound;
+    public CharacterModelControl cmc;
 
     [SyncVar]
     float currentCharge;
@@ -60,6 +61,10 @@ public class JetPack : NetworkBehaviour {
         if (throttleOn && (currentLocalCharge > 0))
         {
             currentLocalCharge -= spendRate;
+            if (cmc.IsJumpOn())
+            {
+                cmc.SetJumpAnimation(false);
+            }
         }
         else if (currentLocalCharge < maxCharge && !throttleOn)
         {

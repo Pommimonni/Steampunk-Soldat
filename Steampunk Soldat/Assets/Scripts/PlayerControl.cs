@@ -22,8 +22,10 @@ public class PlayerControl : NetworkBehaviour {
     bool sideStepping = false;
     bool sideStepLeft = false;
     bool grounded = false;
+    bool landed = false;
     public GameObject[] groundCheckObjects;
     public AudioSource movementSound;
+    public CharacterModelControl cmc;
 
     Vector3 respawnTarget;
 
@@ -71,6 +73,12 @@ public class PlayerControl : NetworkBehaviour {
             return;
 
         
+        //landing check
+        if(!jumping && grounded && !landed && jumpCharge == 0)
+        {
+            Landed();
+        }
+
         ForceMovement();
         if (sideStepping)
         {
@@ -107,6 +115,21 @@ public class PlayerControl : NetworkBehaviour {
         if (jumping) //on cooldown
             return;
 
+        if (grounded)
+        {
+            bool spamjump = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) )
+            {
+                cmc.SetJumpAnimation(true);
+                landed = false;
+            } else if ((spamjump && jumpCharge == 0))
+            {
+                cmc.SetJumpAnimation(false);
+                cmc.SetJumpAnimation(true);
+                landed = false;
+            }
+        }
+
         bool jumpRelease = Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W);
         bool jumpHold = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W);
 
@@ -137,6 +160,14 @@ public class PlayerControl : NetworkBehaviour {
         {
             jumpCharge = 0;
         }
+    }
+
+
+    void Landed()
+    {
+
+        cmc.SetJumpAnimation(false);
+        landed = true;
     }
 
 

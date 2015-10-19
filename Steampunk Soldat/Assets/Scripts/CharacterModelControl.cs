@@ -13,6 +13,10 @@ public class CharacterModelControl : NetworkBehaviour {
     public float armDirection;
     float localArmDirection;
 
+    [SyncVar(hook ="JumpChanged")]
+    bool jumpOn = false;
+    bool localJumpOn = false;
+
     NetworkIdentity netID;
 
     public Animator anim;
@@ -27,6 +31,7 @@ public class CharacterModelControl : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
         SetXSpeed(GetComponent<Rigidbody>().velocity.x);
+        
         if (netID.isLocalPlayer)
         {
             AimAtCursor();
@@ -57,6 +62,7 @@ public class CharacterModelControl : NetworkBehaviour {
     void FixedUpdate()
     {
         NetSyncAimDirection();
+        
     }
 
     int count = 0;
@@ -130,8 +136,50 @@ public class CharacterModelControl : NetworkBehaviour {
         //Debug.Log("x speed: " + a);
         anim.SetFloat("rolling", a);
     }
+
+    [Command]
+    void CmdSetJump(bool jump)
+    {
+        jumpOn = jump;
+        anim.SetBool("jumping", jump);
+    }
+
+    void JumpChanged(bool newJump)
+    {
+        jumpOn = newJump;
+        if (isLocalPlayer || isServer)
+            return;
+        anim.SetBool("jumping", newJump);
+        
+    }
+
+    public void SetJumpAnimation(bool jump)
+    {
+        if (isLocalPlayer)
+        {
+            anim.SetBool("jumping", jump);
+            CmdSetJump(jump);
+        }
+    }
+
+    public bool IsJumpOn()
+    {
+        return jumpOn;
+    }
+
     public void TriggerShoot()
     {
         anim.SetTrigger("shooting");
     }
+
+    public void TriggerReload()
+    {
+        anim.SetTrigger("changing");
+    }
+
+    public void TriggerWeaponChange()
+    {
+        anim.SetTrigger("changing");
+    }
+
 }

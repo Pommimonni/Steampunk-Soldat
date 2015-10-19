@@ -27,6 +27,7 @@ public class CombatControl : NetworkBehaviour {
     bool weaponChangeCooldown = false;
     public RandomAudio dyingScream;
     public AudioSource bulletHit;
+    public CharacterModelControl cmc;
     // Use this for initialization
     void Start () {
         if (isLocalPlayer)
@@ -82,6 +83,7 @@ public class CombatControl : NetworkBehaviour {
     public void SetWeapon(IWeapon newWeapon)
     {
         weaponScript = newWeapon;
+        cmc.TriggerWeaponChange();
     }
 
     //test

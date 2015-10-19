@@ -102,6 +102,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         reloading = true;
         Invoke("ClearReload", reloadTime);
         reloadSound.Play();
+        cmc.TriggerReload();
     }
 
     public void ClearReload()
