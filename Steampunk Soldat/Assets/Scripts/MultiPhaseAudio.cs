@@ -42,6 +42,11 @@ public class MultiPhaseAudio : MonoBehaviour {
         Play(phase);
     }
 
+    public bool IsPlaying()
+    {
+        return audioSource.isPlaying;
+    }
+
     public void PlayLooped(int phase)
     {
         audioSource.loop = true;
@@ -76,6 +81,6 @@ public class MultiPhaseAudio : MonoBehaviour {
 
     void StartNextPhase()
     {
-
+        Play();
     }
 }

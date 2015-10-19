@@ -32,6 +32,7 @@ public class MinigunSpec : WeaponBase
         {
             if(shootingPhase == 2)
             {
+                CmdStopShootingSound();
                 multiAudio.Play(3);
             }
             if(currentChargeTime > 0)
@@ -60,6 +61,7 @@ public class MinigunSpec : WeaponBase
             {
                 shootingPhase = 2;
                 multiAudio.Play(2);
+                CmdStartShootingSound();
                 currentChargeTime = chargeTime;
             }
         }
@@ -80,5 +82,29 @@ public class MinigunSpec : WeaponBase
         ShootBullet(from, towards);
     }
 
+    [Command]
+    void CmdStartShootingSound()
+    {
+        RpcStartShootingSound();
+    }
+    [Command]
+    void CmdStopShootingSound()
+    {
+        RpcStopShootingSound();
+    }
+    [ClientRpc]
+    void RpcStartShootingSound()
+    {
+        if (isLocalPlayer)
+            return;
+        multiAudio.Play(2);
+    }
+    [ClientRpc]
+    void RpcStopShootingSound()
+    {
+        if (isLocalPlayer)
+            return;
+        multiAudio.ResetToStart();
+    }
 
 }

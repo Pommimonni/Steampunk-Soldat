@@ -67,13 +67,19 @@ public class JetPack : NetworkBehaviour {
             if (currentLocalCharge > maxCharge)
                 currentLocalCharge = maxCharge;
         }
+        if(currentLocalCharge <= 1 && jetSound.IsPlaying())
+        {
+            jetSound.ResetToStart();
+            CmdStopSound();
+        }
 
         if (!throttleOn && (soundPhase == 2 || soundPhase == 1))
         {
             soundPhase = 0;
             jetSound.PlayOnce(3);
+            CmdStopSound();
         }
-        if (throttleOn)
+        if (throttleOn && currentLocalCharge > 0)
         {
             if(soundPhase == 0)
             {
@@ -87,6 +93,7 @@ public class JetPack : NetworkBehaviour {
                 {
                     soundPhase = 2;
                     jetSound.PlayLooped(soundPhase);
+                    CmdStartSound(); //start sound over network
                 }
             }
             
@@ -109,5 +116,29 @@ public class JetPack : NetworkBehaviour {
                 GetComponent<Rigidbody>().AddForce(jetForce);
             }
         }
+    }
+    [Command]
+    void CmdStartSound()
+    {
+        RpcStartSound();
+    }
+    [Command]
+    void CmdStopSound()
+    {
+        RpcStopSound();
+    }
+    [ClientRpc]
+    void RpcStartSound()
+    {
+        if (isLocalPlayer)
+            return;
+        jetSound.Play(2);
+    }
+    [ClientRpc]
+    void RpcStopSound()
+    {
+        if (isLocalPlayer)
+            return;
+        jetSound.ResetToStart();
     }
 }
