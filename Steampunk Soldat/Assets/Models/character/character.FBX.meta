@@ -166,10 +166,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -216,7 +212,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -266,10 +262,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -316,7 +308,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -366,10 +358,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -416,7 +404,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -466,10 +454,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -516,7 +500,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -566,10 +550,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -616,7 +596,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -666,10 +646,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -716,7 +692,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -766,10 +742,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -816,7 +788,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -866,10 +838,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -916,7 +884,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
@@ -966,10 +934,6 @@ ModelImporter:
         weight: 1
       - path: hat
         weight: 1
-      - path: IK Chain002
-        weight: 1
-      - path: IK Chain003
-        weight: 1
       - path: pelvis
         weight: 1
       - path: pelvis/backpackbone
@@ -1016,7 +980,7 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
         weight: 1
-      - path: pelvis/wheelbone
+      - path: wheelbone
         weight: 1
       - path: wheels
         weight: 1
