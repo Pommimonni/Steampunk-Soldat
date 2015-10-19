@@ -25,7 +25,7 @@ public class CombatControl : NetworkBehaviour {
 
     public bool dead = false;
     bool weaponChangeCooldown = false;
-    public AudioSource dyingScream;
+    public RandomAudio dyingScream;
     public AudioSource bulletHit;
     // Use this for initialization
     void Start () {
