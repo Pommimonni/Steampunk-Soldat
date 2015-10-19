@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 222a99aa296631b4f9c9afb6df5b38b7
-timeCreated: 1445190045
+timeCreated: 1445244749
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -37,6 +37,11 @@ ModelImporter:
     100058: wheelbone
     100060: wheels
     100062: hatbouncebone
+    100064: backpackbone
+    100066: ltsydeemi
+    100068: ltsydeemi02
+    100070: rtsydeemi
+    100072: rtsydeemi02
     400000: body
     400002: Box004
     400004: Box005
@@ -69,6 +74,11 @@ ModelImporter:
     400058: wheelbone
     400060: wheels
     400062: hatbouncebone
+    400064: backpackbone
+    400066: ltsydeemi
+    400068: ltsydeemi02
+    400070: rtsydeemi
+    400072: rtsydeemi02
     4300000: wheels
     4300002: Box004
     4300004: Box005
@@ -89,7 +99,9 @@ ModelImporter:
     7400022: jumpStart
     7400024: jumpMidair
     7400026: jumpLand
+    7400028: jesusPose
     9500000: //RootNode
+    11100000: //RootNode
     13700000: body
     13700002: Box004
     13700004: Box005
@@ -107,14 +119,14 @@ ModelImporter:
     motionNodeName: <Root Transform>
     animationImportErrors: '
 
-      Imported file ''character'' conversion failed: Required human bone ''LeftUpperLeg''
+      Imported file ''character'' conversion failed: Required human bone ''LeftFoot''
       not found
 
 
 '
     animationImportWarnings: 
     animationRetargetingWarnings: 
-    animationDoRetargetingWarnings: 0
+    animationDoRetargetingWarnings: 1
     animationCompression: 3
     animationRotationError: .5
     animationPositionError: .5
@@ -172,6 +184,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -192,7 +214,9 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
         weight: 1
-      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbone
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
         weight: 1
@@ -260,6 +284,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -280,7 +314,9 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
         weight: 1
-      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbone
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
         weight: 1
@@ -347,6 +383,16 @@ ModelImporter:
       - path: IK Chain003
         weight: 1
       - path: pelvis
+        weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
         weight: 1
       - path: pelvis/spinebone01
         weight: 1
@@ -438,6 +484,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -458,7 +514,9 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
         weight: 1
-      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbone
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
         weight: 1
@@ -526,6 +584,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -546,7 +614,9 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
         weight: 1
-      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbone
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
         weight: 1
@@ -614,6 +684,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -634,7 +714,9 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
         weight: 1
-      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbone
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
         weight: 1
@@ -702,6 +784,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -722,7 +814,9 @@ ModelImporter:
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
         weight: 1
-      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbone
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
         weight: 1
@@ -789,6 +883,16 @@ ModelImporter:
       - path: IK Chain003
         weight: 1
       - path: pelvis
+        weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
         weight: 1
       - path: pelvis/spinebone01
         weight: 1
@@ -880,6 +984,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -970,6 +1084,16 @@ ModelImporter:
         weight: 1
       - path: pelvis
         weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
       - path: pelvis/spinebone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02
@@ -1037,28 +1161,38 @@ ModelImporter:
       - path: 
         weight: 1
       - path: body
-        weight: 0
+        weight: 1
       - path: Box004
-        weight: 0
+        weight: 1
       - path: Box005
-        weight: 0
+        weight: 1
       - path: engine
-        weight: 0
+        weight: 1
       - path: enginebone01
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02/enginebone03
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02/enginebone03/enginebone04
-        weight: 0
+        weight: 1
       - path: hat
-        weight: 0
+        weight: 1
       - path: IK Chain002
-        weight: 0
+        weight: 1
       - path: IK Chain003
-        weight: 0
+        weight: 1
       - path: pelvis
+        weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
         weight: 1
       - path: pelvis/spinebone01
         weight: 1
@@ -1075,7 +1209,7 @@ ModelImporter:
       - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01/lhandbone02
-        weight: 0
+        weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
@@ -1093,11 +1227,11 @@ ModelImporter:
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
-        weight: 0
+        weight: 1
       - path: wheelbone
-        weight: 0
+        weight: 1
       - path: wheels
-        weight: 0
+        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
@@ -1127,28 +1261,38 @@ ModelImporter:
       - path: 
         weight: 1
       - path: body
-        weight: 0
+        weight: 1
       - path: Box004
-        weight: 0
+        weight: 1
       - path: Box005
-        weight: 0
+        weight: 1
       - path: engine
-        weight: 0
+        weight: 1
       - path: enginebone01
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02/enginebone03
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02/enginebone03/enginebone04
-        weight: 0
+        weight: 1
       - path: hat
-        weight: 0
+        weight: 1
       - path: IK Chain002
-        weight: 0
+        weight: 1
       - path: IK Chain003
-        weight: 0
+        weight: 1
       - path: pelvis
+        weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
         weight: 1
       - path: pelvis/spinebone01
         weight: 1
@@ -1165,7 +1309,7 @@ ModelImporter:
       - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01/lhandbone02
-        weight: 0
+        weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
@@ -1183,11 +1327,11 @@ ModelImporter:
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
-        weight: 0
+        weight: 1
       - path: wheelbone
-        weight: 0
+        weight: 1
       - path: wheels
-        weight: 0
+        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
@@ -1217,28 +1361,38 @@ ModelImporter:
       - path: 
         weight: 1
       - path: body
-        weight: 0
+        weight: 1
       - path: Box004
-        weight: 0
+        weight: 1
       - path: Box005
-        weight: 0
+        weight: 1
       - path: engine
-        weight: 0
+        weight: 1
       - path: enginebone01
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02/enginebone03
-        weight: 0
+        weight: 1
       - path: enginebone01/enginebone02/enginebone03/enginebone04
-        weight: 0
+        weight: 1
       - path: hat
-        weight: 0
+        weight: 1
       - path: IK Chain002
-        weight: 0
+        weight: 1
       - path: IK Chain003
-        weight: 0
+        weight: 1
       - path: pelvis
+        weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
         weight: 1
       - path: pelvis/spinebone01
         weight: 1
@@ -1255,7 +1409,7 @@ ModelImporter:
       - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01/lhandbone02
-        weight: 0
+        weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
@@ -1273,11 +1427,11 @@ ModelImporter:
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01
         weight: 1
       - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
-        weight: 0
+        weight: 1
       - path: wheelbone
-        weight: 0
+        weight: 1
       - path: wheels
-        weight: 0
+        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
@@ -1370,6 +1524,106 @@ ModelImporter:
         weight: 0
       maskType: 0
       maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: jesusPose
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: body
+        weight: 1
+      - path: Box004
+        weight: 1
+      - path: Box005
+        weight: 1
+      - path: engine
+        weight: 1
+      - path: enginebone01
+        weight: 1
+      - path: enginebone01/enginebone02
+        weight: 1
+      - path: enginebone01/enginebone02/enginebone03
+        weight: 1
+      - path: enginebone01/enginebone02/enginebone03/enginebone04
+        weight: 1
+      - path: hat
+        weight: 1
+      - path: IK Chain002
+        weight: 1
+      - path: IK Chain003
+        weight: 1
+      - path: pelvis
+        weight: 1
+      - path: pelvis/backpackbone
+        weight: 1
+      - path: pelvis/ltsydeemi
+        weight: 1
+      - path: pelvis/ltsydeemi/ltsydeemi02
+        weight: 1
+      - path: pelvis/rtsydeemi
+        weight: 1
+      - path: pelvis/rtsydeemi/rtsydeemi02
+        weight: 1
+      - path: pelvis/spinebone01
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/lcollarbone/larmbone01/larmbone02/lhandbone01/lhandbone02
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/neckbone/headbone/hatbouncebone/hatbone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01
+        weight: 1
+      - path: pelvis/spinebone01/spinebone02/spinebone03/rcollarbone/rarmbone01/rarmbone02/rhandbone01/rhandbone02
+        weight: 1
+      - path: wheelbone
+        weight: 1
+      - path: wheels
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -1405,6 +1659,22 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
+    - boneName: ltsydeemi
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: rtsydeemi
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
     - boneName: spinebone01
       humanName: Spine
       limit:
@@ -1413,7 +1683,7 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
-    - boneName: spinebone02
+    - boneName: spinebone03
       humanName: Chest
       limit:
         min: {x: 0, y: 0, z: 0}
@@ -1509,6 +1779,22 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
+    - boneName: ltsydeemi02
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: rtsydeemi02
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
     skeleton:
     - name: character(Clone)
       position: {x: 0, y: 0, z: 0}
@@ -1536,24 +1822,24 @@ ModelImporter:
       scale: {x: .901819408, y: 1, z: 1}
       transformModified: 1
     - name: enginebone01
-      position: {x: 3.87573238e-07, y: 3.08972907, z: -1.56934369}
-      rotation: {x: -.153389663, y: .69026947, z: -.153389767, w: .690269053}
-      scale: {x: 1.00000048, y: 1.00000024, z: .999999702}
+      position: {x: 7.75146475e-07, y: 3.08973026, z: -1.56934357}
+      rotation: {x: -.153388411, y: .690269649, z: -.153388694, w: .690269291}
+      scale: {x: 1.00000024, y: .999999881, z: 1}
       transformModified: 1
     - name: enginebone02
-      position: {x: -.625620127, y: 0, z: -7.4491183e-08}
-      rotation: {x: -4.42793038e-08, y: 3.17615232e-08, z: .882512331, w: .47028932}
-      scale: {x: 1.00000012, y: 1.00000072, z: 1.00000012}
+      position: {x: -.625619829, y: 0, z: -7.44913677e-08}
+      rotation: {x: -2.43540743e-08, y: 1.64138481e-08, z: .882511675, w: .470290482}
+      scale: {x: 1, y: 1.00000048, z: 1}
       transformModified: 1
     - name: enginebone03
-      position: {x: -1.79853475, y: -2.96493527e-05, z: 1.84809321e-13}
-      rotation: {x: -3.95309087e-07, y: -4.99049293e-07, z: -.76934725, w: .638830841}
-      scale: {x: .999999404, y: .999999583, z: 1.00000048}
+      position: {x: -1.79853463, y: -2.94555666e-05, z: 0}
+      rotation: {x: -2.56306436e-07, y: -3.57334301e-07, z: -.769347429, w: .638830602}
+      scale: {x: .999999225, y: .999999583, z: 1.0000006}
       transformModified: 1
     - name: enginebone04
-      position: {x: -.643319428, y: 2.90679935e-07, z: 2.18485283e-08}
-      rotation: {x: -1.08113376e-07, y: 6.26686685e-08, z: -.0177973174, w: .99984163}
-      scale: {x: .999999583, y: .999999702, z: 1.00000012}
+      position: {x: -.643319607, y: 4.84466568e-07, z: 2.18485283e-08}
+      rotation: {x: -9.62880264e-08, y: 2.07806963e-08, z: -.0177973025, w: .99984163}
+      scale: {x: .999999583, y: .999999821, z: 1.00000012}
       transformModified: 1
     - name: hat
       position: {x: -.0154602993, y: 5.25712395, z: -.695139825}
@@ -1574,6 +1860,31 @@ ModelImporter:
       position: {x: -3.50751144e-08, y: 3.52455759, z: -.802424967}
       rotation: {x: -.49319917, y: .506709576, z: -.49319917, w: .506709576}
       scale: {x: 1, y: .99999994, z: 1}
+      transformModified: 1
+    - name: backpackbone
+      position: {x: .07986404, y: .984689295, z: 0}
+      rotation: {x: -1.22333488e-16, y: 5.66711901e-18, z: -.0462755375, w: .998928726}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ltsydeemi
+      position: {x: .210047647, y: .0939341858, z: -.883634686}
+      rotation: {x: .70699513, y: -.0125682633, z: -.00653812196, w: .70707649}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: ltsydeemi02
+      position: {x: .577675998, y: .00160581281, z: -.00220238487}
+      rotation: {x: 1.19244659e-08, y: -1.21877175e-09, z: -.00426442409, w: .99999094}
+      scale: {x: .99999994, y: 1, z: .99999994}
+      transformModified: 1
+    - name: rtsydeemi
+      position: {x: .210048035, y: .0939339921, z: .851570666}
+      rotation: {x: .707042336, y: -.00955344364, z: -.00955307297, w: .707042158}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: rtsydeemi02
+      position: {x: .577640891, y: .0147565603, z: -.00220277254}
+      rotation: {x: -3.86224662e-15, y: 7.2830644e-14, z: -3.19717827e-07, w: 1}
+      scale: {x: .99999994, y: 1, z: .99999994}
       transformModified: 1
     - name: spinebone01
       position: {x: -.589744985, y: .0947219282, z: -.00743636768}
@@ -1597,7 +1908,7 @@ ModelImporter:
       transformModified: 1
     - name: larmbone01
       position: {x: -.959038079, y: -1.93786627e-06, z: 2.90679935e-07}
-      rotation: {x: .0265941452, y: .0549120903, z: -.0170223881, w: .99799186}
+      rotation: {x: .0265460275, y: .0563586652, z: -.0179028045, w: .997897089}
       scale: {x: .999999881, y: 1.0000006, z: 1.00000012}
       transformModified: 1
     - name: larmbone02
@@ -1642,7 +1953,7 @@ ModelImporter:
       transformModified: 1
     - name: rarmbone01
       position: {x: -.975688577, y: 0, z: 4.04238847e-07}
-      rotation: {x: -.0155196413, y: .0639899895, z: .00504403794, w: .997817159}
+      rotation: {x: -.0155992536, y: .0621146038, z: .00416728342, w: .997938454}
       scale: {x: 1.00000012, y: 1.00000012, z: 1}
       transformModified: 1
     - name: rarmbone02
@@ -1661,9 +1972,9 @@ ModelImporter:
       scale: {x: 1.00000012, y: 1.00000012, z: 1}
       transformModified: 1
     - name: wheelbone
-      position: {x: 9.37064968e-08, y: 1.58975327, z: -.919617593}
-      rotation: {x: 6.65790267e-08, y: -0, z: 0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
+      position: {x: 1.93786619e-07, y: 1.58975375, z: -.919617593}
+      rotation: {x: 6.65790267e-08, y: -1.5873677e-14, z: -2.38418579e-07, w: 1}
+      scale: {x: 1, y: .999999881, z: .999999881}
       transformModified: 1
     - name: wheels
       position: {x: -.0154602993, y: 5.25712395, z: -.695139825}
