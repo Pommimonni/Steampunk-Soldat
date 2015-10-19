@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 222a99aa296631b4f9c9afb6df5b38b7
-timeCreated: 1445242604
+timeCreated: 1445244749
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -101,6 +101,7 @@ ModelImporter:
     7400026: jumpLand
     7400028: jesusPose
     9500000: //RootNode
+    11100000: //RootNode
     13700000: body
     13700002: Box004
     13700004: Box005
@@ -118,14 +119,14 @@ ModelImporter:
     motionNodeName: <Root Transform>
     animationImportErrors: '
 
-      Imported file ''character'' conversion failed: Required human bone ''LeftLowerLeg''
+      Imported file ''character'' conversion failed: Required human bone ''LeftFoot''
       not found
 
 
 '
     animationImportWarnings: 
     animationRetargetingWarnings: 
-    animationDoRetargetingWarnings: 0
+    animationDoRetargetingWarnings: 1
     animationCompression: 3
     animationRotationError: .5
     animationPositionError: .5
@@ -1682,7 +1683,7 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
-    - boneName: spinebone02
+    - boneName: spinebone03
       humanName: Chest
       limit:
         min: {x: 0, y: 0, z: 0}
@@ -1772,6 +1773,22 @@ ModelImporter:
         modified: 0
     - boneName: hatbone
       humanName: RightEye
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: ltsydeemi02
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: rtsydeemi02
+      humanName: RightLowerLeg
       limit:
         min: {x: 0, y: 0, z: 0}
         max: {x: 0, y: 0, z: 0}
