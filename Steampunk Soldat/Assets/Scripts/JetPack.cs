@@ -11,7 +11,7 @@ public class JetPack : NetworkBehaviour {
     public float spendRate;
     public float maxYVelocity;
     public Slider chargeBar;
-    public AudioSource jetSound;
+    public MultiPhaseAudio jetSound;
 
     [SyncVar]
     float currentCharge;
@@ -19,6 +19,8 @@ public class JetPack : NetworkBehaviour {
     float currentLocalCharge;
     
     bool throttleOn = false;
+
+    int soundPhase = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -46,6 +48,8 @@ public class JetPack : NetworkBehaviour {
         currentCharge = Mathf.Lerp(currentCharge, newCharge, Time.time * 0.2f);
     }
     float yVel;
+    float soundChargeTime = 0.191f;
+    float currentSoundCharge = 0;
     void FixedUpdate()
     {
         if (!isLocalPlayer)
@@ -64,13 +68,28 @@ public class JetPack : NetworkBehaviour {
                 currentLocalCharge = maxCharge;
         }
 
-        if (!throttleOn && jetSound.isPlaying)
+        if (!throttleOn && (soundPhase == 2 || soundPhase == 1))
         {
-            jetSound.Stop();
+            soundPhase = 0;
+            jetSound.PlayOnce(3);
         }
-        if (throttleOn && !jetSound.isPlaying)
+        if (throttleOn)
         {
-            jetSound.Play();
+            if(soundPhase == 0)
+            {
+                currentSoundCharge = 0;
+                soundPhase = 1;
+                jetSound.PlayOnce(soundPhase);
+            } else if (soundPhase == 1)
+            {
+                currentSoundCharge += Time.fixedDeltaTime;
+                if(currentSoundCharge > soundChargeTime)
+                {
+                    soundPhase = 2;
+                    jetSound.PlayLooped(soundPhase);
+                }
+            }
+            
         }
         if (count < 12)
         {

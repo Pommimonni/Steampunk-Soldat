@@ -30,6 +30,22 @@ public class MultiPhaseAudio : MonoBehaviour {
         int phaseIndex = phase - 1;
         audioSource.clip = audioClips[phaseIndex];
         audioSource.Play();
+        if(audioClips.Length >= (phaseIndex+2))
+        {
+            audioClips[phaseIndex + 1].LoadAudioData();
+        }
+    }
+
+    public void PlayOnce(int phase)
+    {
+        audioSource.loop = false;
+        Play(phase);
+    }
+
+    public void PlayLooped(int phase)
+    {
+        audioSource.loop = true;
+        Play(phase);
     }
     
     public void Play()
