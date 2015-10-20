@@ -27,7 +27,7 @@ public class CombatControl : NetworkBehaviour {
     public bool dead = false;
     bool weaponChangeCooldown = false;
     public RandomAudio dyingScream;
-    public AudioSource bulletHit;
+    public RandomAudio bulletHit;
     public CharacterModelControl cmc;
     // Use this for initialization
     void Start () {
@@ -184,17 +184,21 @@ public class CombatControl : NetworkBehaviour {
         dead = false;
         respawning = false;
         healthBar.gameObject.SetActive(true);
-        jetBar.gameObject.SetActive(true);
-        cmc.SwitchRagdoll(false);
+        if (jetBar != null)
+            jetBar.gameObject.SetActive(true);
+        if (cmc != null)
+            cmc.SwitchRagdoll(false);
     }
 
     [ClientRpc]
     public void RpcDie()
     {
         dyingScream.Play();
-        cmc.SwitchRagdoll(true);
+        if(cmc != null)
+            cmc.SwitchRagdoll(true);
         healthBar.gameObject.SetActive(false);
-        jetBar.gameObject.SetActive(false);
+        if(jetBar != null)
+            jetBar.gameObject.SetActive(false);
         dead = true;
         Invoke("EndImmunity", respawnTime + respawnImmuneTime);
         if (isLocalPlayer || (isServer && GetComponent<EnemyAI>() != null))
