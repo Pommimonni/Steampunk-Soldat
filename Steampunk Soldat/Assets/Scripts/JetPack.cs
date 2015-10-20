@@ -13,6 +13,8 @@ public class JetPack : NetworkBehaviour {
     public Slider chargeBar;
     public MultiPhaseAudio jetSound;
     public CharacterModelControl cmc;
+    public ParticleSystem fire;
+    public ParticleSystem smoke;
 
     [SyncVar]
     float currentCharge;
@@ -83,6 +85,8 @@ public class JetPack : NetworkBehaviour {
             soundPhase = 0;
             jetSound.PlayOnce(3);
             CmdStopSound();
+            fire.Stop();
+            smoke.Stop();
         }
         if (throttleOn && currentLocalCharge > 0)
         {
@@ -99,6 +103,8 @@ public class JetPack : NetworkBehaviour {
                     soundPhase = 2;
                     jetSound.PlayLooped(soundPhase);
                     CmdStartSound(); //start sound over network
+                    fire.Play();
+                    smoke.Play();
                 }
             }
             
@@ -138,6 +144,8 @@ public class JetPack : NetworkBehaviour {
         if (isLocalPlayer)
             return;
         jetSound.Play(2);
+        fire.Play();
+        smoke.Play();
     }
     [ClientRpc]
     void RpcStopSound()
@@ -145,5 +153,7 @@ public class JetPack : NetworkBehaviour {
         if (isLocalPlayer)
             return;
         jetSound.ResetToStart();
+        fire.Stop();
+        smoke.Stop();
     }
 }
