@@ -93,7 +93,7 @@ public class PlayerControl : NetworkBehaviour {
     void SideStep()
     {
         sideStepping = false;
-        Debug.Log("side stepping");
+        //Debug.Log("side stepping");
         float xForce = sideStepLeft ? -sideStepForce : sideStepForce;
         float jumpCoef = GetJumpEffort(jumpCharge, jumpTakeoffTime);
         Vector3 sideStepVector = new Vector3(xForce* jumpCoef, sideStepUpForce* jumpCoef, 0);
@@ -201,7 +201,7 @@ public class PlayerControl : NetworkBehaviour {
 
     void JumpCooldown()
     {
-        Debug.Log("Clearing jump cooldown now ");
+        //Debug.Log("Clearing jump cooldown now ");
         jumping = false;
         jumpCharge = 0;
     }

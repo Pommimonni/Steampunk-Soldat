@@ -97,7 +97,7 @@ public class PlayerScore : NetworkBehaviour {
 
     void RestartLevel()
     {
-        NetworkManager.singleton.ServerChangeScene("Map1(LauriDev)");
+        NetworkManager.singleton.ServerChangeScene("Map1");
     }
     
     [Server]

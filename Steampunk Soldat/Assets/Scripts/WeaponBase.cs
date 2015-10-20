@@ -73,7 +73,6 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
             return;
         if (Input.GetMouseButton(0))
         {
-            
             ShootingRequest(); //sends a request to server to shoot
         }
     }
@@ -97,7 +96,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
 
     public void SetReload(bool onCD)
     {
-        Debug.Log("reloading!");
+        //Debug.Log("reloading!");
         onCooldown = onCD;
         reloading = true;
         Invoke("ClearReload", reloadTime);
@@ -122,8 +121,8 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     {
         if (!Cooldown() && !cc.dead)
         {
-            Debug.Log("Gun not on cooldown");
-            Debug.Log("requesting to shoot");
+            //Debug.Log("Gun not on cooldown");
+            //Debug.Log("requesting to shoot");
             Vector3 pPos = weaponOwner.transform.position;
             Vector3 mPos = Input.mousePosition;
             //Debug.Log("Mouse: " + mPos);
@@ -133,7 +132,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
             shootDirection.Normalize();
             Vector3 inacc = getInaccurasy();
             CmdShoot(barrelEnd.position, shootDirection + inacc); //server fires the real bullet
-            Debug.Log("Calling local sim shoot");
+            //Debug.Log("Calling local sim shoot");
             //StartCoroutine(LocalShootSim(barrelEnd.position, shootDirection + inacc)); //local player simulates it
             ammoLeftInClip--;
             if (ammoLeftInClip < 1)
@@ -155,7 +154,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     [Command]
     public virtual void CmdShoot(Vector3 from, Vector3 towards) //the real bullet that deals dmg
     {
-        Debug.Log("cmd bang!");
+        //Debug.Log("cmd bang!");
         //StartCoroutine(DelayedShoot(from, towards));
         HandleShoot(from, towards);
         RpcShootSim(from, towards);
@@ -163,11 +162,11 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
 
     IEnumerator DelayedShoot(Vector3 from, Vector3 towards)
     {
-        Debug.Log("Before delay");
+        //Debug.Log("Before delay");
         yield return new WaitForSeconds(0.005f);
-        Debug.Log("After delay");
+        //Debug.Log("After delay");
         HandleShoot(from, towards);
-        Debug.Log("After delayed shoot");
+        //Debug.Log("After delayed shoot");
     }
 
     [ClientRpc]
@@ -175,23 +174,23 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     {
         if (weaponOwner.GetComponent<NetworkIdentity>().isServer)  
             return;
-        Debug.Log("Rpc sim bang!");
+        //Debug.Log("Rpc sim bang!");
         HandleShoot(from, towards);//non local clients
 
     }
 
     public virtual IEnumerator LocalShootSim(Vector3 from, Vector3 towards) //local simulation
     {
-        Debug.Log("local sim bang 1!");
+        //Debug.Log("local sim bang 1!");
         if (!weaponOwner.GetComponent<NetworkIdentity>().isLocalPlayer || weaponOwner.GetComponent<NetworkIdentity>().isServer)
             yield return null;
 
         
         if (!onCooldown)
         {
-            Debug.Log("local sim bang 2 before delay!");
+            //Debug.Log("local sim bang 2 before delay!");
             yield return new WaitForSeconds(Network.GetLastPing(Network.player));
-            Debug.Log("local sim bang 2 after delay!");
+            //Debug.Log("local sim bang 2 after delay!");
             HandleShoot(from, towards);
         }
     }
@@ -203,7 +202,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     
     public void ShootBullet(Vector3 from, Vector3 towards) //both server and sim
     {
-        Debug.Log("Spawning a bullet");
+        //Debug.Log("Spawning a bullet");
         Vector3 finalFrom = from;
         finalFrom.z = 0;
         GameObject bullet = (GameObject)Instantiate(bulletPrefab, finalFrom, Quaternion.LookRotation(towards));
@@ -222,7 +221,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         cmc.TriggerShoot();
     }
 
-    void DropShell(Vector3 from)
+    public virtual void DropShell(Vector3 from)
     {
         GameObject shell = (GameObject)Instantiate(shellPrefab, from, Quaternion.identity);
         Rigidbody shellRB = shell.GetComponent<Rigidbody>();
@@ -230,7 +229,7 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
         Vector3 shellDir = Vector3.up * 20 + shellRandomDir;
         shellRB.AddForce(shellDir * 10);
         shellRB.AddTorque(new Vector3(0.5f * (Random.value - 0.5f), 0, Random.value - 0.5f) * 35f);
-        Destroy(shell, 5.0f);
+        Destroy(shell, 2.5f);
     }
 
     public virtual void ShootSound()

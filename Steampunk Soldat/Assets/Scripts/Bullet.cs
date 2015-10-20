@@ -45,32 +45,38 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter(Collider otherCollider) //local sim just destroys the bullet, server applies dmg
     {
-        if (alreadyTriggered || (owner == otherCollider.transform.parent.gameObject))
+        Transform otherParentTrans = otherCollider.transform.parent;
+        GameObject otherParent = null;
+        if(otherParentTrans != null)
+        {
+            otherParent = otherParentTrans.gameObject;
+        }
+        if (alreadyTriggered || (owner == otherParent))
         {
             return;
         }
-        Debug.Log("Bullet collided");
-        GameObject other = otherCollider.transform.parent.gameObject;
+        //Debug.Log("Bullet collided");
+        GameObject other = otherCollider.transform.gameObject;
         if (other.layer == LayerMask.NameToLayer("Bullet"))
         {
-            Debug.Log("Bullet hit bullet");
+            //Debug.Log("Bullet hit bullet");
             return;
         }
         alreadyTriggered = true; //avoid possible double triggers
         if (other.layer == LayerMask.NameToLayer("Ground"))
         {
-            Debug.Log("Bullet hit ground");
+            //Debug.Log("Bullet hit ground");
             GetComponent<RandomAudio>().Play();
             GameObject fx = (GameObject)GameObject.Instantiate(hitWallFX, gameObject.transform.position, Quaternion.Euler(GetComponent<Rigidbody>().velocity));
             Destroy(gameObject, 1f);
         }
-        if (other.layer == LayerMask.NameToLayer("Player"))
+        if (otherParent != null && otherParent.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("Bullet hit player");
+            //Debug.Log("Bullet hit player");
             if (LocalData.isServerPlayer)
             {
-                Debug.Log("Bullet hit player on SErver, applying dmg!");
-                other.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage, owner);
+                //Debug.Log("Bullet hit player on SErver, applying dmg!");
+                otherParent.GetComponentInParent<CombatControl>().TakeDamage(bulletDamage, owner);
             }
             GameObject fx = (GameObject)GameObject.Instantiate(hitPlayerFX, gameObject.transform.position, Quaternion.Euler(GetComponent<Rigidbody>().velocity));
             Destroy(gameObject);
