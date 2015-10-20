@@ -8,7 +8,7 @@ public class PlayerScore : NetworkBehaviour {
     public int kills = 0;
     [SyncVar]
     public int deaths = 0;
-    [SyncVar]
+    [SyncVar (hook = "NameChanged")]
     public short playerID = -1;
     [SyncVar]
     public float playerPing = -2;
@@ -32,6 +32,15 @@ public class PlayerScore : NetworkBehaviour {
         if (isServer)
             SetPlayerID(); //the local player will get an ID from server that is synced to all
         
+    }
+
+    void NameChanged(short newNameID)
+    {
+        this.playerID = newNameID;
+        if (isLocalPlayer)
+        {
+            NameSetter.setName = "Player " + newNameID;
+        }
     }
 
     void RefreshPing() //called only on local player
