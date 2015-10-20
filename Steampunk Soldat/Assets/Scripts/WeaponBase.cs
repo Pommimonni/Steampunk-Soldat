@@ -204,14 +204,18 @@ public class WeaponBase : NetworkBehaviour, IWeapon {
     public void ShootBullet(Vector3 from, Vector3 towards) //both server and sim
     {
         Debug.Log("Spawning a bullet");
-        GameObject bullet = (GameObject)Instantiate(bulletPrefab, from, Quaternion.LookRotation(towards));
+        Vector3 finalFrom = from;
+        finalFrom.z = 0;
+        GameObject bullet = (GameObject)Instantiate(bulletPrefab, finalFrom, Quaternion.LookRotation(towards));
         Physics.IgnoreCollision(weaponOwnerCollider, bullet.GetComponent<Collider>()); //dont collide to local player
         Bullet bulletControl = bullet.GetComponent<Bullet>();
         bulletControl.setDamage(damage);
         bulletControl.ShotBy(weaponOwner);
         bulletControl.ShotBy(this);
         Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
-        bulletRB.velocity = towards * bulletSpeed;
+        Vector3 finalTowards = towards;
+        finalTowards.z = 0;
+        bulletRB.velocity = finalTowards * bulletSpeed;
         Destroy(bullet, 3.0f);
         DropShell((this.transform.position + from) / 2);
         ShootSound();

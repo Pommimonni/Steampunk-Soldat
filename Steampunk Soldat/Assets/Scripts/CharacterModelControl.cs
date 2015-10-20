@@ -21,6 +21,9 @@ public class CharacterModelControl : NetworkBehaviour {
 
     public Animator anim;
 
+    public GameObject ragdollPrefab;
+    public GameObject controlledCharacter;
+
 
     // Use this for initialization
     void Start () {
@@ -39,6 +42,41 @@ public class CharacterModelControl : NetworkBehaviour {
         }
             
         
+    }
+
+    public void SwitchRagdoll(bool toRag)
+    {
+        if (toRag)
+        {
+            EnableCharacterModel(false);
+            SpawnRagdoll();
+        } else
+        {
+            EnableCharacterModel(true);
+        }
+        
+
+    }
+
+    void EnableCharacterModel(bool enableChar)
+    {
+        controlledCharacter.SetActive(enableChar);
+    }
+
+    void SpawnRagdoll()
+    {
+        Vector3 dyingVelocity = this.GetComponent<Rigidbody>().velocity;
+        Debug.Log("Spawning ragdoll with force: " + dyingVelocity);
+        Quaternion spawnRotation = this.transform.rotation;
+        spawnRotation *= Quaternion.Euler(0,-90,0);
+        GameObject newRag = (GameObject)GameObject.Instantiate(ragdollPrefab, this.transform.position, spawnRotation);
+        //newRag.transform.parent = this.gameObject.transform;
+        foreach(Rigidbody rdrb in newRag.GetComponent<RagdollParts>().ragParts)
+        {
+            rdrb.velocity = dyingVelocity*2;
+        }
+        //newRag.GetComponent<Rigidbody>().velocity = dyingVelocity*2;
+        Destroy(newRag, 5f);
     }
 
     float faceDir = 1;
