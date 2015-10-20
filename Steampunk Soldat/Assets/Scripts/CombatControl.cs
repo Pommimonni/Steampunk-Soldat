@@ -18,6 +18,7 @@ public class CombatControl : NetworkBehaviour {
 
     public float maxHealth = 100;
     public Slider healthBar;
+    public Slider jetBar;
 
     public float respawnImmuneTime = 1;
     public float respawnTime = 2;
@@ -26,7 +27,7 @@ public class CombatControl : NetworkBehaviour {
     public bool dead = false;
     bool weaponChangeCooldown = false;
     public RandomAudio dyingScream;
-    public AudioSource bulletHit;
+    public RandomAudio bulletHit;
     public CharacterModelControl cmc;
     // Use this for initialization
     void Start () {
@@ -121,6 +122,10 @@ public class CombatControl : NetworkBehaviour {
         {
             CmdSpawnWeapon((int)Weapon.Minigun);
         }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            TakeDamage(35, gameObject);
+        }
     }
 
     void ChangedWeapon()
@@ -179,13 +184,21 @@ public class CombatControl : NetworkBehaviour {
         dead = false;
         respawning = false;
         healthBar.gameObject.SetActive(true);
+        if (jetBar != null)
+            jetBar.gameObject.SetActive(true);
+        if (cmc != null)
+            cmc.SwitchRagdoll(false);
     }
 
     [ClientRpc]
     public void RpcDie()
     {
         dyingScream.Play();
+        if(cmc != null)
+            cmc.SwitchRagdoll(true);
         healthBar.gameObject.SetActive(false);
+        if(jetBar != null)
+            jetBar.gameObject.SetActive(false);
         dead = true;
         Invoke("EndImmunity", respawnTime + respawnImmuneTime);
         if (isLocalPlayer || (isServer && GetComponent<EnemyAI>() != null))
