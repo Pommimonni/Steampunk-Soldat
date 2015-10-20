@@ -69,7 +69,7 @@ public class CharacterModelControl : NetworkBehaviour {
         Debug.Log("Spawning ragdoll with force: " + dyingVelocity);
         Quaternion spawnRotation = this.transform.rotation;
         spawnRotation *= Quaternion.Euler(0,-90,0);
-        GameObject newRag = (GameObject)GameObject.Instantiate(ragdollPrefab, this.transform.position, spawnRotation);
+        GameObject newRag = (GameObject)GameObject.Instantiate(ragdollPrefab, this.controlledCharacter.transform.position, spawnRotation);
         //newRag.transform.parent = this.gameObject.transform;
         foreach(Rigidbody rdrb in newRag.GetComponent<RagdollParts>().ragParts)
         {

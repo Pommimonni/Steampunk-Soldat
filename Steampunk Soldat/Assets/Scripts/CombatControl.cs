@@ -216,7 +216,7 @@ public class CombatControl : NetworkBehaviour {
     public void Respawn()
     {
         respawning = true;
-        GameObject spawnPoint = SpawnPoint.FindNearest(this.transform.position);
+        GameObject spawnPoint = SpawnPoint.FindRandom();
         if(spawnPoint != null)
         {
             if(this.GetComponent<PlayerControl>() != null)

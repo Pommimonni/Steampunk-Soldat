@@ -31,5 +31,12 @@ public class SpawnPoint : MonoBehaviour {
         }
         return chosenSpawnPoint;
     }
-	
+
+    public static GameObject FindRandom()
+    {
+        GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("Spawn Point");
+        int randomChoise = Random.Range(0, spawnPoints.Length);
+        return spawnPoints[randomChoise];
+    }
+
 }
