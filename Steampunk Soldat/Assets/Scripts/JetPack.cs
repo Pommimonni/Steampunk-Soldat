@@ -78,6 +78,8 @@ public class JetPack : NetworkBehaviour {
         {
             jetSound.ResetToStart();
             CmdStopSound();
+            fire.Stop();
+            smoke.Stop();
         }
 
         if (!throttleOn && (soundPhase == 2 || soundPhase == 1))
